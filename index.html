@@ -152,8 +152,8 @@
             }
 
             .sidebar-close-btn {
-                width: 1.8rem;
-                height: 1.8rem;
+                width: 1.9rem;
+                height: 1.9rem;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -219,6 +219,76 @@
             .search-btn svg {
                 width: 1.2rem;
                 height: 1.2rem;
+            }
+
+            .pin-list,
+            .chat-list {
+                display: flex;
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+
+            .list-header {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                color: var(--accent);
+            }
+
+            .list-header svg {
+                width: 1rem;
+                height: 1rem;
+            }
+
+            .chat-item {
+                padding: 0.5rem 0.7rem;
+                border-radius: 0.8rem;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                background: transparent;
+                border: 1px solid transparent;
+                font-size: 0.9rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .chat-item span {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+
+            .chat-item button {
+                width: 1.9rem;
+                height: 1.9rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0.3rem;
+                border-radius: 0.5rem;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                border: 1px solid transparent;
+                background: transparent;
+                color: var(--text-secondary);
+            }
+
+            .chat-item button:hover {
+                background: var(--glass-white);
+                border-color: var(--glass-border);
+            }
+
+            .chat-item:hover {
+                background: var(--glass-light);
+                border-color: var(--glass-border);
+                transform: translateX(0.3rem);
+            }
+
+            .chat-item.active {
+                background: var(--glass-white);
+                border-color: var(--accent);
+                box-shadow: 0 0.3rem 1.2rem var(--shadow-soft);
             }
         </style>
     </head>
@@ -302,7 +372,7 @@
                             <circle cx="11" cy="11" r="8" />
                         </g>
                     </svg>
-                    <span>Search chats...</span>
+                    <span>Search Chats...</span>
                     <span class="shortcut-popup">
                         <kbd>/</kbd>
                         or
@@ -311,28 +381,234 @@
                     </span>
                 </button>
 
+                <div class="pin-list">
+                    <div class="list-header">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 17v5M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4a1 1 0 0 1 1 1z"
+                            />
+                        </svg>
+                        <span>Pinned</span>
+                    </div>
+
+                    <div class="chat-item">
+                        <span
+                            >Designing a modern interface lorem ipsum huhu</span
+                        >
+
+                        <button>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                            >
+                                <g
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                >
+                                    <circle cx="12" cy="12" r="1" />
+                                    <circle cx="12" cy="5" r="1" />
+                                    <circle cx="12" cy="19" r="1" />
+                                </g>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="chat-item">
+                        <span
+                            >Let's break down the timeline lorem ipsum
+                            huhu</span
+                        >
+
+                        <button>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                            >
+                                <g
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                >
+                                    <circle cx="12" cy="12" r="1" />
+                                    <circle cx="12" cy="5" r="1" />
+                                    <circle cx="12" cy="19" r="1" />
+                                </g>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="chat-item">
+                        <span
+                            >The implementation looks good lorem ipsum
+                            huhu</span
+                        >
+
+                        <button>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                            >
+                                <g
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                >
+                                    <circle cx="12" cy="12" r="1" />
+                                    <circle cx="12" cy="5" r="1" />
+                                    <circle cx="12" cy="19" r="1" />
+                                </g>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
                 <div class="chat-list">
+                    <div class="list-header">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                        >
+                            <g
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                            >
+                                <path
+                                    d="M3 12a9 9 0 1 0 9-9a9.75 9.75 0 0 0-6.74 2.74L3 8"
+                                />
+                                <path d="M3 3v5h5m4-1v5l4 2" />
+                            </g>
+                        </svg>
+                        <span>Recent</span>
+                    </div>
+
                     <div class="chat-item active">
-                        <div class="chat-title">Current Chat</div>
-                        <div class="chat-preview">
-                            Designing a modern interface...
-                        </div>
+                        <span
+                            >Designing a modern interface lorem ipsum huhu</span
+                        >
+
+                        <button>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                            >
+                                <g
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                >
+                                    <circle cx="12" cy="12" r="1" />
+                                    <circle cx="12" cy="5" r="1" />
+                                    <circle cx="12" cy="19" r="1" />
+                                </g>
+                            </svg>
+                        </button>
                     </div>
                     <div class="chat-item">
-                        <div class="chat-title">Project Planning</div>
-                        <div class="chat-preview">
-                            Let's break down the timeline...
-                        </div>
+                        <span
+                            >Let's break down the timeline lorem ipsum
+                            huhu</span
+                        >
+
+                        <button>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                            >
+                                <g
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                >
+                                    <circle cx="12" cy="12" r="1" />
+                                    <circle cx="12" cy="5" r="1" />
+                                    <circle cx="12" cy="19" r="1" />
+                                </g>
+                            </svg>
+                        </button>
                     </div>
                     <div class="chat-item">
-                        <div class="chat-title">Code Review</div>
-                        <div class="chat-preview">
-                            The implementation looks good...
-                        </div>
+                        <span
+                            >he implementation looks good lorem ipsum huhu</span
+                        >
+
+                        <button>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                            >
+                                <g
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                >
+                                    <circle cx="12" cy="12" r="1" />
+                                    <circle cx="12" cy="5" r="1" />
+                                    <circle cx="12" cy="19" r="1" />
+                                </g>
+                            </svg>
+                        </button>
                     </div>
                     <div class="chat-item">
-                        <div class="chat-title">Creative Writing</div>
-                        <div class="chat-preview">Once upon a time in a...</div>
+                        <span>Creative Writing lorem ipsum huhu</span>
+
+                        <button>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                            >
+                                <g
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                >
+                                    <circle cx="12" cy="12" r="1" />
+                                    <circle cx="12" cy="5" r="1" />
+                                    <circle cx="12" cy="19" r="1" />
+                                </g>
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </aside>
