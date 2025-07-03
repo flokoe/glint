@@ -425,7 +425,11 @@
             }
 
             .searchDialog form svg {
-                color: var(--text-primary);
+                color: var(--text-secondary);
+            }
+
+            .search-focused {
+                color: var(--text-primary) !important;
             }
 
             .searchDialog input[type="search"] {
@@ -511,6 +515,11 @@
                 border-color: var(--glass-border);
                 outline: none;
             }
+
+            main {
+                width: 60rem;
+                margin: 0 auto;
+            }
         </style>
 
         <!-- Alpine Plugins -->
@@ -536,7 +545,8 @@
                 search: '',
                 showItem(el) {
                     return this.search === '' || el.textContent.toLowerCase().includes(this.search.toLowerCase());
-                }
+                },
+                searchFocused: true
             }"
             @keydown.ctrl.b.window.prevent="sidebarOpen = !sidebarOpen"
             @keydown.slash.window.prevent="$refs.searchDialog.showModal()"
@@ -550,6 +560,7 @@
                             width="24"
                             height="24"
                             viewBox="0 0 24 24"
+                            :class="searchFocused && 'search-focused'"
                         >
                             <g
                                 fill="none"
@@ -568,6 +579,8 @@
                             autofocus
                             placeholder="Type to search or press Enter to start new chat..."
                             @keydown.down="$focus.within($refs.results).first()"
+                            @focus="searchFocused = true"
+                            @blur="searchFocused = false"
                         />
                         <button class="search-close-btn">
                             <svg
