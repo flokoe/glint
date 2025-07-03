@@ -280,7 +280,8 @@
             }
 
             .pin-list,
-            .chat-list {
+            .chat-list,
+            .result-list {
                 display: flex;
                 flex-direction: column;
                 gap: 0.3rem;
@@ -402,7 +403,121 @@
                 background: rgba(239, 68, 68, 0.1);
                 color: rgba(239, 68, 68, 1);
             }
+
+            .searchDialog {
+                background: var(--glass-white);
+                backdrop-filter: blur(10px);
+                border: 1px solid var(--glass-border);
+                border-radius: 1rem;
+                width: 42rem;
+                min-height: 27rem;
+                overflow: visible;
+                box-shadow: 0 0.5rem 2rem var(--shadow-medium);
+                padding: 0;
+            }
+
+            .searchDialog form {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                padding: 1rem;
+                border-bottom: 1px solid var(--glass-border);
+            }
+
+            .searchDialog form svg {
+                color: var(--text-primary);
+            }
+
+            .searchDialog input[type="search"] {
+                background: transparent;
+                outline: none;
+                border: 0;
+                color: var(--text-primary);
+                padding: 0;
+                width: 100%;
+            }
+
+            .searchDialog input[type="search"]::placeholder {
+                color: var(--text-secondary);
+                opacity: 1; /* Firefox */
+            }
+
+            .search-close-btn {
+                width: 1.9rem;
+                height: 1.9rem;
+                display: flex;
+                align-items: center;
+                padding: 0.3rem;
+                border-radius: 0.5rem;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                border: 1px solid transparent;
+                background: transparent;
+                color: var(--text-secondary);
+            }
+
+            .search-close-btn:hover {
+                background: var(--glass-light);
+                border-color: var(--glass-border);
+            }
+
+            .result-list {
+                max-height: 23rem;
+                padding: 1rem;
+                overflow-y: auto;
+
+                mask-image: linear-gradient(
+                    to bottom,
+                    transparent 0%,
+                    black 5%,
+                    black 90%,
+                    transparent 100%
+                );
+
+                mask-size: 100% 100%;
+                mask-repeat: no-repeat;
+
+                scrollbar-color: var(--text-tertiary) transparent; /* thumb + transparent track */
+                scrollbar-gutter: stable both-edges; /* reserve layout space */
+            }
+
+            .result-list ul {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+            }
+
+            .result-item {
+                display: block;
+                padding: 0.7rem;
+                border-radius: 0.5rem;
+                transition: all 0.3s ease;
+                background: transparent;
+                border: 1px solid transparent;
+                color: var(--text-secondary);
+                text-decoration: none;
+                gap: 0.5rem;
+            }
+
+            .result-item:hover {
+                background: var(--glass-light);
+                color: var(--text-primary);
+                border-color: var(--glass-border);
+            }
+
+            .result-item:focus {
+                background: var(--glass-light);
+                color: var(--text-primary);
+                border-color: var(--glass-border);
+                outline: none;
+            }
         </style>
+
+        <!-- Alpine Plugins -->
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"
+        ></script>
 
         <script
             defer
@@ -416,9 +531,141 @@
 
         <div
             class="container"
-            x-data="{ sidebarOpen: true }"
+            x-data="{
+                sidebarOpen: true,
+                search: '',
+                showItem(el) {
+                    return this.search === '' || el.textContent.toLowerCase().includes(this.search.toLowerCase());
+                }
+            }"
             @keydown.ctrl.b.window.prevent="sidebarOpen = !sidebarOpen"
+            @keydown.slash.window.prevent="$refs.searchDialog.showModal()"
+            @keydown.ctrl.k.window.prevent="$refs.searchDialog.showModal()"
         >
+            <dialog class="searchDialog" x-ref="searchDialog">
+                <div @click.outside.capture="$refs.searchDialog.close()">
+                    <form method="dialog">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                        >
+                            <g
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                            >
+                                <path d="m21 21l-4.34-4.34" />
+                                <circle cx="11" cy="11" r="8" />
+                            </g>
+                        </svg>
+                        <input
+                            type="search"
+                            x-model="search"
+                            autofocus
+                            placeholder="Type to search or press Enter to start new chat..."
+                            @keydown.down="$focus.within($refs.results).first()"
+                        />
+                        <button class="search-close-btn">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M18 6L6 18M6 6l12 12"
+                                />
+                            </svg>
+                            <span class="shortcut-popup">
+                                <kbd>Esc</kbd>
+                            </span>
+                        </button>
+                    </form>
+                    <div class="result-list">
+                        <div class="list-header">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                            >
+                                <g
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                >
+                                    <path
+                                        d="M3 12a9 9 0 1 0 9-9a9.75 9.75 0 0 0-6.74 2.74L3 8"
+                                    />
+                                    <path d="M3 3v5h5m4-1v5l4 2" />
+                                </g>
+                            </svg>
+                            <span>Recent</span>
+                        </div>
+
+                        <ul
+                            x-ref="results"
+                            @keydown.down="$focus.wrap().next()"
+                            @keydown.up="$focus.wrap().previous()"
+                        >
+                            <li x-show="showItem($el)">
+                                <a href="#" class="result-item">
+                                    Designing a modern interface lorem ipsum
+                                    huhu
+                                </a>
+                            </li>
+                            <li x-show="showItem($el)">
+                                <a href="#" class="result-item">
+                                    Let's break down the timeline lorem ipsum
+                                    huhu
+                                </a>
+                            </li>
+                            <li x-show="showItem($el)">
+                                <a href="#" class="result-item">
+                                    The implementation looks good lorem ipsum
+                                    huhu
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- <div class="result-item" x-show="showItem($el)">
+                        The implementation looks good lorem ipsum huhu
+                    </div>
+                    <div class="result-item" x-show="showItem($el)">
+                        The implementation looks good lorem ipsum huhu
+                    </div>
+                    <div class="result-item" x-show="showItem($el)">
+                        The implementation looks good lorem ipsum huhu
+                    </div>
+                    <div class="result-item" x-show="showItem($el)">
+                        The implementation looks good lorem ipsum huhu
+                    </div>
+                    <div class="result-item" x-show="showItem($el)">
+                        The implementation looks good lorem ipsum huhu
+                    </div>
+                    <div class="result-item" x-show="showItem($el)">
+                        The implementation looks good lorem ipsum huhu
+                    </div>
+                    <div class="result-item" x-show="showItem($el)">
+                        The implementation looks good lorem ipsum huhu
+                    </div>
+                    <div class="result-item" x-show="showItem($el)">
+                        The implementation looks good lorem ipsum huhu
+                    </div> -->
+                    </div>
+                </div>
+            </dialog>
+
             <aside class="sidebar-collapsed" x-cloak x-show="!sidebarOpen">
                 <button @click="sidebarOpen = !sidebarOpen">
                     <svg
@@ -557,7 +804,10 @@
                     </span>
                 </button>
 
-                <button class="search-btn">
+                <button
+                    class="search-btn"
+                    @click="$refs.searchDialog.showModal()"
+                >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
