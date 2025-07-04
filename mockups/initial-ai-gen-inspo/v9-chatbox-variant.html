@@ -1,0 +1,1661 @@
+<!--
+AI generated mockup design for Glint project, intended for inspiration.
+Copyright (C) 2025  Florian Köhler
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Liquid Glass AI Chat</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            :root {
+                --glass-white: rgba(255, 255, 255, 0.1);
+                --glass-light: rgba(255, 255, 255, 0.05);
+                --glass-ultra-light: rgba(255, 255, 255, 0.02);
+                --glass-border: rgba(255, 255, 255, 0.15);
+                --text-primary: rgba(255, 255, 255, 0.95);
+                --text-secondary: rgba(255, 255, 255, 0.7);
+                --text-tertiary: rgba(255, 255, 255, 0.5);
+                --accent: #007aff;
+                --accent-glow: rgba(0, 122, 255, 0.3);
+                --shadow-soft: rgba(0, 0, 0, 0.1);
+                --shadow-medium: rgba(0, 0, 0, 0.2);
+            }
+
+            body {
+                font-family:
+                    -apple-system, BlinkMacSystemFont, "SF Pro Display",
+                    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+                background: linear-gradient(
+                    135deg,
+                    #1c1c3a 0%,
+                    #2d1b69 50%,
+                    #0f3460 100%
+                );
+                color: var(--text-primary);
+                height: 100vh;
+                overflow: hidden;
+                position: relative;
+            }
+
+            /* Animated background orbs */
+            .background-orb {
+                position: absolute;
+                border-radius: 50%;
+                filter: blur(100px);
+                opacity: 0.5;
+                animation: float 20s ease-in-out infinite;
+            }
+
+            .orb-1 {
+                width: 600px;
+                height: 600px;
+                background: radial-gradient(
+                    circle,
+                    rgba(0, 122, 255, 0.4) 0%,
+                    transparent 70%
+                );
+                top: -200px;
+                left: -200px;
+                animation-delay: 0s;
+            }
+
+            .orb-2 {
+                width: 400px;
+                height: 400px;
+                background: radial-gradient(
+                    circle,
+                    rgba(147, 51, 234, 0.4) 0%,
+                    transparent 70%
+                );
+                bottom: -100px;
+                right: -100px;
+                animation-delay: 7s;
+            }
+
+            .orb-3 {
+                width: 300px;
+                height: 300px;
+                background: radial-gradient(
+                    circle,
+                    rgba(236, 72, 153, 0.4) 0%,
+                    transparent 70%
+                );
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                animation-delay: 14s;
+            }
+
+            @keyframes float {
+                0%,
+                100% {
+                    transform: translate(0, 0) scale(1);
+                }
+                33% {
+                    transform: translate(30px, -50px) scale(1.1);
+                }
+                66% {
+                    transform: translate(-20px, 20px) scale(0.9);
+                }
+            }
+
+            .app-container {
+                display: flex;
+                height: 100vh;
+                position: relative;
+                z-index: 1;
+            }
+
+            /* Glass effect mixin */
+            .glass {
+                background: var(--glass-white);
+                backdrop-filter: blur(20px) saturate(180%);
+                -webkit-backdrop-filter: blur(20px) saturate(180%);
+                border: 1px solid var(--glass-border);
+                box-shadow:
+                    inset 0 1px 2px rgba(255, 255, 255, 0.3),
+                    0 20px 40px var(--shadow-soft),
+                    0 0 80px var(--shadow-soft);
+                position: relative;
+                overflow: hidden;
+            }
+
+            /* Specular highlight effect */
+            .glass::before {
+                content: "";
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: linear-gradient(
+                    45deg,
+                    transparent 30%,
+                    rgba(255, 255, 255, 0.1) 50%,
+                    transparent 70%
+                );
+                transform: rotate(45deg) translateX(-100%);
+                transition: transform 0.6s ease;
+            }
+
+            .glass:hover::before {
+                transform: rotate(45deg) translateX(100%);
+            }
+
+            /* Sidebar */
+            .sidebar {
+                width: 280px;
+                padding: 20px;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                background: var(--glass-ultra-light);
+                backdrop-filter: blur(40px);
+                border-right: 1px solid var(--glass-border);
+                transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+
+            .sidebar.collapsed {
+                width: 80px;
+                padding: 20px 10px;
+            }
+
+            /* Logo */
+            .logo-container {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px;
+                border-radius: 16px;
+                background: var(--glass-light);
+                border: 1px solid var(--glass-border);
+                transition: all 0.3s ease;
+            }
+
+            .logo-container:hover {
+                background: var(--glass-white);
+                transform: translateY(-2px);
+                box-shadow: 0 10px 30px var(--shadow-medium);
+            }
+
+            .logo-icon {
+                width: 44px;
+                height: 44px;
+                background: linear-gradient(
+                    135deg,
+                    var(--accent) 0%,
+                    #5856d6 100%
+                );
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 700;
+                font-size: 20px;
+                color: white;
+                box-shadow: 0 4px 20px var(--accent-glow);
+            }
+
+            .logo-text {
+                font-size: 18px;
+                font-weight: 600;
+                color: var(--text-primary);
+            }
+
+            /* New Chat Button */
+            .new-chat-btn {
+                padding: 16px;
+                border-radius: 16px;
+                background: linear-gradient(
+                    135deg,
+                    var(--accent) 0%,
+                    #5856d6 100%
+                );
+                color: white;
+                border: none;
+                cursor: pointer;
+                font-size: 15px;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                box-shadow: 0 4px 20px var(--accent-glow);
+                position: relative;
+                overflow: hidden;
+            }
+
+            .new-chat-btn::after {
+                content: "";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 0;
+                height: 0;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.3);
+                transform: translate(-50%, -50%);
+                transition:
+                    width 0.6s,
+                    height 0.6s;
+            }
+
+            .new-chat-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 30px var(--accent-glow);
+            }
+
+            .new-chat-btn:active::after {
+                width: 300px;
+                height: 300px;
+            }
+
+            /* Search Bar */
+            .search-container {
+                position: relative;
+            }
+
+            .search-bar {
+                width: 100%;
+                padding: 14px 20px 14px 48px;
+                border-radius: 14px;
+                background: var(--glass-light);
+                border: 1px solid var(--glass-border);
+                color: var(--text-primary);
+                font-size: 15px;
+                transition: all 0.3s ease;
+            }
+
+            .search-bar:focus {
+                outline: none;
+                background: var(--glass-white);
+                border-color: var(--accent);
+                box-shadow: 0 0 0 3px var(--accent-glow);
+            }
+
+            .search-icon {
+                position: absolute;
+                left: 18px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: var(--text-tertiary);
+                font-size: 18px;
+            }
+
+            /* Chat List */
+            .chat-list {
+                flex: 1;
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                padding-right: 8px;
+            }
+
+            .chat-list::-webkit-scrollbar {
+                width: 6px;
+            }
+
+            .chat-list::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            .chat-list::-webkit-scrollbar-thumb {
+                background: var(--glass-border);
+                border-radius: 3px;
+            }
+
+            .chat-item {
+                padding: 14px 16px;
+                border-radius: 12px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                background: transparent;
+                border: 1px solid transparent;
+            }
+
+            .chat-item:hover {
+                background: var(--glass-light);
+                border-color: var(--glass-border);
+                transform: translateX(4px);
+            }
+
+            .chat-item.active {
+                background: var(--glass-white);
+                border-color: var(--accent);
+                box-shadow: 0 4px 20px var(--shadow-soft);
+            }
+
+            .chat-title {
+                font-size: 14px;
+                font-weight: 500;
+                color: var(--text-primary);
+                margin-bottom: 4px;
+            }
+
+            .chat-preview {
+                font-size: 13px;
+                color: var(--text-tertiary);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            /* Main Content */
+            .main-content {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                position: relative;
+            }
+
+            /* Messages Container */
+            .messages-container {
+                flex: 1;
+                overflow-y: auto;
+                padding: 40px 20px;
+                display: flex;
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            /* Message Styles */
+            .message {
+                display: flex;
+                gap: 16px;
+                max-width: 900px;
+                width: 100%;
+                margin: 0 auto;
+                animation: messageSlide 0.4s
+                    cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+
+            @keyframes messageSlide {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px) scale(0.98);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                }
+            }
+
+            .message.user {
+                flex-direction: row-reverse;
+            }
+
+            .message-avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 600;
+                font-size: 16px;
+                flex-shrink: 0;
+                transition: all 0.3s ease;
+            }
+
+            .message.user .message-avatar {
+                background: linear-gradient(
+                    135deg,
+                    var(--accent) 0%,
+                    #5856d6 100%
+                );
+                color: white;
+                box-shadow: 0 4px 12px var(--accent-glow);
+            }
+
+            .message.assistant .message-avatar {
+                background: var(--glass-white);
+                backdrop-filter: blur(20px);
+                border: 1px solid var(--glass-border);
+                color: var(--text-primary);
+                background-image: linear-gradient(
+                    135deg,
+                    rgba(16, 185, 129, 0.1) 0%,
+                    rgba(5, 150, 105, 0.1) 100%
+                );
+            }
+
+            .message-content {
+                flex: 1;
+                padding: 20px 24px;
+                border-radius: 20px;
+                background: var(--glass-white);
+                backdrop-filter: blur(20px);
+                border: 1px solid var(--glass-border);
+                box-shadow: 0 8px 30px var(--shadow-soft);
+                position: relative;
+                overflow: hidden;
+            }
+
+            .message.user .message-content {
+                background: linear-gradient(
+                    135deg,
+                    rgba(0, 122, 255, 0.15) 0%,
+                    rgba(88, 86, 214, 0.15) 100%
+                );
+                border-color: rgba(0, 122, 255, 0.3);
+            }
+
+            .message-content p {
+                margin: 0;
+                line-height: 1.6;
+                color: var(--text-primary);
+            }
+
+            .message-content p + p {
+                margin-top: 16px;
+            }
+
+            /* Code Block */
+            .code-block {
+                margin: 16px 0;
+                border-radius: 12px;
+                overflow: hidden;
+                background: rgba(0, 0, 0, 0.2);
+                border: 1px solid var(--glass-border);
+            }
+
+            .code-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px 16px;
+                background: rgba(0, 0, 0, 0.1);
+                border-bottom: 1px solid var(--glass-border);
+            }
+
+            .code-language {
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--accent);
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .copy-btn {
+                padding: 4px 12px;
+                border-radius: 6px;
+                background: var(--glass-white);
+                border: 1px solid var(--glass-border);
+                color: var(--text-secondary);
+                font-size: 12px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .copy-btn:hover {
+                background: var(--glass-light);
+                color: var(--text-primary);
+                transform: translateY(-1px);
+            }
+
+            .code-block pre {
+                margin: 0;
+                padding: 16px;
+                overflow-x: auto;
+                font-family: "SF Mono", "Monaco", "Consolas", monospace;
+                font-size: 13px;
+                line-height: 1.5;
+                color: rgba(255, 255, 255, 0.9);
+            }
+
+            .code-block code {
+                background: none;
+                padding: 0;
+            }
+
+            /* Feature List */
+            .feature-list {
+                list-style: none;
+                padding: 0;
+                margin: 16px 0;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .feature-list li {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                color: var(--text-primary);
+                font-size: 14px;
+            }
+
+            /* Action Pills */
+            .action-pills {
+                display: flex;
+                gap: 8px;
+                margin-top: 16px;
+                flex-wrap: wrap;
+            }
+
+            .pill-btn {
+                padding: 6px 14px;
+                border-radius: 20px;
+                background: var(--glass-light);
+                border: 1px solid var(--glass-border);
+                color: var(--text-secondary);
+                font-size: 13px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                white-space: nowrap;
+            }
+
+            .pill-btn:hover {
+                background: var(--glass-white);
+                border-color: var(--accent);
+                color: var(--text-primary);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 20px var(--shadow-soft);
+            }
+
+            /* Typing Indicator */
+            .message.typing .message-content {
+                padding: 20px;
+            }
+
+            .typing-indicator {
+                display: flex;
+                gap: 4px;
+                align-items: center;
+            }
+
+            .typing-indicator span {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: var(--text-tertiary);
+                animation: typing 1.4s infinite;
+            }
+
+            .typing-indicator span:nth-child(2) {
+                animation-delay: 0.2s;
+            }
+
+            .typing-indicator span:nth-child(3) {
+                animation-delay: 0.4s;
+            }
+
+            @keyframes typing {
+                0%,
+                60%,
+                100% {
+                    transform: translateY(0);
+                    opacity: 0.5;
+                }
+                30% {
+                    transform: translateY(-10px);
+                    opacity: 1;
+                }
+            }
+
+            /* Message Hover Effects */
+            .message-content::before {
+                content: "";
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(
+                    circle,
+                    rgba(255, 255, 255, 0.1) 0%,
+                    transparent 70%
+                );
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                pointer-events: none;
+            }
+
+            .message-content:hover::before {
+                opacity: 1;
+            }
+
+            /* Timestamp */
+            .message-timestamp {
+                font-size: 11px;
+                color: var(--text-tertiary);
+                margin-top: 8px;
+                opacity: 0;
+                transition: opacity 0.2s ease;
+            }
+
+            .message:hover .message-timestamp {
+                opacity: 1;
+            }
+
+            /* Input Area */
+            .input-area {
+                padding: 30px;
+                background: var(--glass-ultra-light);
+                backdrop-filter: blur(40px);
+                border-top: 1px solid var(--glass-border);
+            }
+
+            .input-container {
+                max-width: 900px;
+                margin: 0 auto;
+            }
+
+            /* Quick Actions Bar */
+            .quick-actions {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 16px;
+                gap: 16px;
+            }
+
+            .quick-actions-left {
+                display: flex;
+                gap: 12px;
+            }
+
+            /* Quick Action Buttons */
+            .quick-btn {
+                padding: 8px 16px;
+                border-radius: 10px;
+                background: var(--glass-white);
+                backdrop-filter: blur(20px);
+                border: 1px solid var(--glass-border);
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 13px;
+                font-weight: 500;
+                color: var(--text-secondary);
+                transition: all 0.3s ease;
+            }
+
+            .quick-btn:hover {
+                background: var(--glass-light);
+                border-color: var(--accent);
+                color: var(--text-primary);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 20px var(--shadow-soft);
+            }
+
+            /* Unified Input Wrapper */
+            .unified-input-wrapper {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                border-radius: 24px;
+                background: var(--glass-white);
+                backdrop-filter: blur(30px) saturate(200%);
+                border: 1px solid var(--glass-border);
+                box-shadow:
+                    inset 0 1px 4px rgba(255, 255, 255, 0.2),
+                    0 8px 40px var(--shadow-medium),
+                    0 0 100px rgba(0, 122, 255, 0.1);
+                transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                overflow: hidden;
+            }
+
+            .unified-input-wrapper:focus-within {
+                border-color: var(--accent);
+                box-shadow:
+                    inset 0 1px 4px rgba(255, 255, 255, 0.3),
+                    0 0 0 3px var(--accent-glow),
+                    0 12px 50px var(--shadow-medium),
+                    0 0 120px rgba(0, 122, 255, 0.2);
+                transform: translateY(-2px);
+            }
+
+            /* Model Selector Integrated */
+            .integrated-model-selector {
+                position: absolute;
+                bottom: 16px;
+                left: 16px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 10px 14px;
+                border-radius: 12px;
+                background: var(--glass-light);
+                backdrop-filter: blur(20px);
+                border: 1px solid var(--glass-border);
+                cursor: pointer;
+                transition: all 0.3s ease;
+                z-index: 2;
+            }
+
+            .integrated-model-selector:hover {
+                background: var(--glass-white);
+                border-color: var(--accent);
+                box-shadow: 0 4px 20px var(--shadow-soft);
+            }
+
+            .model-mini-icon {
+                width: 24px;
+                height: 24px;
+                border-radius: 8px;
+                background: linear-gradient(
+                    135deg,
+                    var(--accent) 0%,
+                    #5856d6 100%
+                );
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 12px;
+                color: white;
+                font-weight: 600;
+                box-shadow: 0 2px 8px var(--accent-glow);
+            }
+
+            .model-mini-info {
+                display: flex;
+                flex-direction: column;
+                gap: 1px;
+            }
+
+            .model-mini-name {
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--text-primary);
+                line-height: 1;
+            }
+
+            .model-mini-status {
+                font-size: 10px;
+                color: var(--text-tertiary);
+                display: flex;
+                align-items: center;
+                gap: 4px;
+            }
+
+            .mini-status-dot {
+                width: 4px;
+                height: 4px;
+                border-radius: 50%;
+                background: #10b981;
+                box-shadow: 0 0 4px rgba(16, 185, 129, 0.5);
+            }
+
+            .model-dropdown-arrow {
+                font-size: 10px;
+                color: var(--text-tertiary);
+                margin-left: 4px;
+            }
+
+            /* Input Field Container */
+            .input-field-container {
+                position: relative;
+                padding: 20px 20px 60px 20px;
+            }
+
+            .chat-input {
+                width: 100%;
+                padding: 0;
+                background: transparent;
+                border: none;
+                color: var(--text-primary);
+                font-size: 16px;
+                resize: none;
+                min-height: 24px;
+                max-height: 120px;
+                line-height: 1.5;
+            }
+
+            .chat-input:focus {
+                outline: none;
+            }
+
+            .chat-input::placeholder {
+                color: var(--text-tertiary);
+            }
+
+            /* Integrated Input Actions */
+            .integrated-input-actions {
+                position: absolute;
+                bottom: 16px;
+                right: 16px;
+                display: flex;
+                gap: 8px;
+                align-items: center;
+            }
+
+            .input-btn {
+                width: 36px;
+                height: 36px;
+                border-radius: 10px;
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+                font-size: 18px;
+                color: var(--text-secondary);
+            }
+
+            .input-btn:hover {
+                background: var(--glass-light);
+                color: var(--text-primary);
+            }
+
+            .send-btn {
+                background: linear-gradient(
+                    135deg,
+                    var(--accent) 0%,
+                    #5856d6 100%
+                );
+                color: white;
+                box-shadow: 0 2px 10px var(--accent-glow);
+            }
+
+            .send-btn:hover {
+                transform: scale(1.05);
+                box-shadow: 0 4px 20px var(--accent-glow);
+            }
+
+            .send-btn:active {
+                transform: scale(0.95);
+            }
+
+            /* Model Dropdown Menu */
+            .model-dropdown {
+                position: absolute;
+                bottom: calc(100% + 8px);
+                left: 0;
+                min-width: 280px;
+                padding: 8px;
+                border-radius: 16px;
+                background: var(--glass-white);
+                backdrop-filter: blur(30px) saturate(200%);
+                border: 1px solid var(--glass-border);
+                box-shadow: 0 12px 40px var(--shadow-medium);
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(10px) scale(0.95);
+                transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+
+            .model-dropdown.show {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0) scale(1);
+            }
+
+            .model-option {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px 16px;
+                border-radius: 12px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .model-option:hover {
+                background: var(--glass-light);
+            }
+
+            .model-option.selected {
+                background: linear-gradient(
+                    135deg,
+                    rgba(0, 122, 255, 0.1) 0%,
+                    rgba(88, 86, 214, 0.1) 100%
+                );
+                border: 1px solid rgba(0, 122, 255, 0.2);
+            }
+
+            .model-option-icon {
+                width: 36px;
+                height: 36px;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 16px;
+                font-weight: 600;
+                color: white;
+            }
+
+            .model-option-info {
+                flex: 1;
+            }
+
+            .model-option-name {
+                font-size: 14px;
+                font-weight: 600;
+                color: var(--text-primary);
+                margin-bottom: 2px;
+            }
+
+            .model-option-desc {
+                font-size: 12px;
+                color: var(--text-tertiary);
+            }
+
+            /* Model Colors */
+            .model-claude-opus {
+                background: linear-gradient(135deg, #007aff 0%, #5856d6 100%);
+            }
+
+            .model-claude-sonnet {
+                background: linear-gradient(135deg, #34c759 0%, #30d158 100%);
+            }
+
+            .model-gpt-4 {
+                background: linear-gradient(135deg, #ff3b30 0%, #ff6482 100%);
+            }
+
+            .model-gemini {
+                background: linear-gradient(135deg, #ff9500 0%, #ffcc00 100%);
+            }
+
+            /* Empty State */
+            .empty-state {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                gap: 30px;
+                text-align: center;
+                padding: 40px;
+            }
+
+            .empty-state-icon {
+                width: 100px;
+                height: 100px;
+                border-radius: 24px;
+                background: var(--glass-white);
+                backdrop-filter: blur(20px);
+                border: 1px solid var(--glass-border);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 48px;
+                box-shadow: 0 20px 60px var(--shadow-soft);
+            }
+
+            .empty-state h1 {
+                font-size: 32px;
+                font-weight: 700;
+                color: var(--text-primary);
+                margin: 0;
+            }
+
+            .empty-state p {
+                font-size: 16px;
+                color: var(--text-secondary);
+                max-width: 500px;
+                line-height: 1.5;
+            }
+
+            .suggestions {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                gap: 16px;
+                width: 100%;
+                max-width: 800px;
+                margin-top: 20px;
+            }
+
+            .suggestion-card {
+                padding: 20px;
+                border-radius: 16px;
+                background: var(--glass-white);
+                backdrop-filter: blur(20px);
+                border: 1px solid var(--glass-border);
+                cursor: pointer;
+                transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                text-align: left;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .suggestion-card::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(
+                    135deg,
+                    transparent 0%,
+                    rgba(255, 255, 255, 0.1) 100%
+                );
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+
+            .suggestion-card:hover {
+                transform: translateY(-4px) scale(1.02);
+                box-shadow: 0 12px 40px var(--shadow-medium);
+                border-color: var(--accent);
+            }
+
+            .suggestion-card:hover::before {
+                opacity: 1;
+            }
+
+            .suggestion-icon {
+                font-size: 24px;
+                margin-bottom: 12px;
+            }
+
+            .suggestion-title {
+                font-size: 16px;
+                font-weight: 600;
+                color: var(--text-primary);
+                margin-bottom: 4px;
+            }
+
+            .suggestion-desc {
+                font-size: 14px;
+                color: var(--text-secondary);
+            }
+
+            /* Advanced Options (Simplified) */
+            .advanced-panel {
+                position: absolute;
+                bottom: calc(100% + 8px);
+                right: 0;
+                width: 320px;
+                padding: 16px;
+                border-radius: 16px;
+                background: var(--glass-white);
+                backdrop-filter: blur(30px) saturate(200%);
+                border: 1px solid var(--glass-border);
+                box-shadow: 0 12px 40px var(--shadow-medium);
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(10px) scale(0.95);
+                transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+
+            .advanced-panel.show {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0) scale(1);
+            }
+
+            .advanced-panel-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 16px;
+            }
+
+            .advanced-panel-title {
+                font-size: 14px;
+                font-weight: 600;
+                color: var(--text-primary);
+            }
+
+            .close-panel-btn {
+                width: 24px;
+                height: 24px;
+                border-radius: 6px;
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 16px;
+                color: var(--text-tertiary);
+                transition: all 0.2s ease;
+            }
+
+            .close-panel-btn:hover {
+                background: var(--glass-light);
+                color: var(--text-primary);
+            }
+
+            .option-group {
+                margin-bottom: 12px;
+            }
+
+            .option-label {
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--text-secondary);
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                margin-bottom: 6px;
+            }
+
+            .option-slider {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .slider {
+                flex: 1;
+                height: 4px;
+                border-radius: 2px;
+                background: var(--glass-light);
+                position: relative;
+                cursor: pointer;
+            }
+
+            .slider-fill {
+                position: absolute;
+                height: 100%;
+                background: linear-gradient(
+                    90deg,
+                    var(--accent) 0%,
+                    #5856d6 100%
+                );
+                border-radius: 2px;
+                width: 70%;
+            }
+
+            .slider-thumb {
+                position: absolute;
+                top: 50%;
+                left: 70%;
+                transform: translate(-50%, -50%);
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                background: white;
+                box-shadow: 0 2px 8px var(--shadow-medium);
+                cursor: grab;
+            }
+
+            .slider-value {
+                font-size: 12px;
+                font-weight: 500;
+                color: var(--text-primary);
+                min-width: 32px;
+                text-align: right;
+            }
+
+            /* Tooltips */
+            .tooltip {
+                position: absolute;
+                bottom: calc(100% + 8px);
+                left: 50%;
+                transform: translateX(-50%);
+                padding: 6px 12px;
+                border-radius: 8px;
+                background: rgba(0, 0, 0, 0.8);
+                color: white;
+                font-size: 12px;
+                white-space: nowrap;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.2s ease;
+                pointer-events: none;
+            }
+
+            .tooltip.show {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            /* Responsive */
+            @media (max-width: 768px) {
+                .sidebar {
+                    position: fixed;
+                    left: -280px;
+                    z-index: 100;
+                    height: 100vh;
+                    box-shadow: 4px 0 20px var(--shadow-medium);
+                }
+
+                .sidebar.open {
+                    left: 0;
+                }
+
+                .messages-container {
+                    padding: 20px 10px;
+                }
+
+                .input-area {
+                    padding: 20px 10px;
+                }
+
+                .integrated-model-selector {
+                    padding: 8px 12px;
+                }
+
+                .model-mini-name {
+                    display: none;
+                }
+
+                .model-dropdown {
+                    min-width: 240px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Background orbs for depth -->
+        <div class="background-orb orb-1"></div>
+        <div class="background-orb orb-2"></div>
+        <div class="background-orb orb-3"></div>
+
+        <div class="app-container">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="logo-container">
+                    <div class="logo-icon">AI</div>
+                    <span class="logo-text">Liquid Chat</span>
+                </div>
+
+                <button class="new-chat-btn">
+                    <span>✨</span>
+                    <span>New Chat</span>
+                </button>
+
+                <div class="search-container">
+                    <span class="search-icon">🔍</span>
+                    <input
+                        type="text"
+                        class="search-bar"
+                        placeholder="Search conversations..."
+                    />
+                </div>
+
+                <div class="chat-list">
+                    <div class="chat-item active">
+                        <div class="chat-title">Current Chat</div>
+                        <div class="chat-preview">
+                            Designing a modern interface...
+                        </div>
+                    </div>
+                    <div class="chat-item">
+                        <div class="chat-title">Project Planning</div>
+                        <div class="chat-preview">
+                            Let's break down the timeline...
+                        </div>
+                    </div>
+                    <div class="chat-item">
+                        <div class="chat-title">Code Review</div>
+                        <div class="chat-preview">
+                            The implementation looks good...
+                        </div>
+                    </div>
+                    <div class="chat-item">
+                        <div class="chat-title">Creative Writing</div>
+                        <div class="chat-preview">Once upon a time in a...</div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Messages -->
+                <div class="messages-container">
+                    <!-- Chat Messages -->
+                    <div class="message user">
+                        <div class="message-content glass">
+                            <p>
+                                Can you help me create a React component for a
+                                modern dashboard with animated charts?
+                            </p>
+                        </div>
+                        <div class="message-avatar">U</div>
+                    </div>
+
+                    <div class="message assistant">
+                        <div class="message-avatar glass">AI</div>
+                        <div class="message-content glass">
+                            <p>
+                                I'd be happy to help you create a modern React
+                                dashboard component with animated charts! Here's
+                                a comprehensive solution using popular
+                                libraries:
+                            </p>
+
+                            <div class="code-block glass">
+                                <div class="code-header">
+                                    <span class="code-language">jsx</span>
+                                    <button class="copy-btn">📋 Copy</button>
+                                </div>
+                                <pre><code>import React, { useState, useEffect } from 'react';
+import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
+         XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+         ResponsiveContainer } from 'recharts';
+import { motion } from 'framer-motion';
+
+const Dashboard = () => {
+  const [data, setData] = useState([]);
+
+  // Component code here...
+}</code></pre>
+                            </div>
+
+                            <p>This dashboard includes:</p>
+                            <ul class="feature-list">
+                                <li>
+                                    📊 Multiple chart types (Line, Bar, Pie)
+                                </li>
+                                <li>✨ Smooth animations with Framer Motion</li>
+                                <li>📱 Fully responsive design</li>
+                                <li>🎨 Customizable color schemes</li>
+                            </ul>
+
+                            <div class="action-pills">
+                                <button class="pill-btn glass">
+                                    👍 Helpful
+                                </button>
+                                <button class="pill-btn glass">
+                                    💭 Explain more
+                                </button>
+                                <button class="pill-btn glass">
+                                    🔄 Try another approach
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="message user">
+                        <div class="message-content glass">
+                            <p>
+                                That looks great! Can you also add real-time
+                                data updates and a dark mode toggle?
+                            </p>
+                        </div>
+                        <div class="message-avatar">U</div>
+                    </div>
+
+                    <div class="message assistant typing">
+                        <div class="message-avatar glass">AI</div>
+                        <div class="message-content glass">
+                            <div class="typing-indicator">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Area -->
+                <div class="input-area">
+                    <div class="input-container">
+                        <!-- Quick Actions Bar -->
+                        <div class="quick-actions">
+                            <div class="quick-actions-left">
+                                <button class="quick-btn glass">
+                                    <span>📚</span>
+                                    <span>Templates</span>
+                                </button>
+                                <button class="quick-btn glass">
+                                    <span>🧠</span>
+                                    <span>Context</span>
+                                </button>
+                            </div>
+                            <div class="quick-actions-left">
+                                <button class="quick-btn glass">
+                                    <span>💾</span>
+                                    <span>Save</span>
+                                </button>
+                                <button class="quick-btn glass">
+                                    <span>📤</span>
+                                    <span>Export</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Unified Input Wrapper -->
+                        <div class="unified-input-wrapper glass">
+                            <!-- Integrated Model Selector -->
+                            <div
+                                class="integrated-model-selector"
+                                onclick="toggleModelDropdown()"
+                            >
+                                <div class="model-mini-icon">AI</div>
+                                <div class="model-mini-info">
+                                    <div class="model-mini-name">
+                                        Claude 3.5
+                                    </div>
+                                    <div class="model-mini-status">
+                                        <span class="mini-status-dot"></span>
+                                        <span>Fast</span>
+                                    </div>
+                                </div>
+                                <span class="model-dropdown-arrow">▼</span>
+
+                                <!-- Model Dropdown -->
+                                <div class="model-dropdown" id="modelDropdown">
+                                    <div class="model-option selected">
+                                        <div
+                                            class="model-option-icon model-claude-opus"
+                                        >
+                                            AI
+                                        </div>
+                                        <div class="model-option-info">
+                                            <div class="model-option-name">
+                                                Claude 3.5 Opus
+                                            </div>
+                                            <div class="model-option-desc">
+                                                Most capable, best for complex
+                                                tasks
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="model-option">
+                                        <div
+                                            class="model-option-icon model-claude-sonnet"
+                                        >
+                                            AI
+                                        </div>
+                                        <div class="model-option-info">
+                                            <div class="model-option-name">
+                                                Claude 3.5 Sonnet
+                                            </div>
+                                            <div class="model-option-desc">
+                                                Fast and efficient
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="model-option">
+                                        <div
+                                            class="model-option-icon model-gpt-4"
+                                        >
+                                            G4
+                                        </div>
+                                        <div class="model-option-info">
+                                            <div class="model-option-name">
+                                                GPT-4 Turbo
+                                            </div>
+                                            <div class="model-option-desc">
+                                                OpenAI's flagship model
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="model-option">
+                                        <div
+                                            class="model-option-icon model-gemini"
+                                        >
+                                            GE
+                                        </div>
+                                        <div class="model-option-info">
+                                            <div class="model-option-name">
+                                                Gemini Pro
+                                            </div>
+                                            <div class="model-option-desc">
+                                                Google's advanced model
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Input Field -->
+                            <div class="input-field-container">
+                                <textarea
+                                    class="chat-input"
+                                    placeholder="Ask me anything..."
+                                    rows="1"
+                                ></textarea>
+                            </div>
+
+                            <!-- Integrated Actions -->
+                            <div class="integrated-input-actions">
+                                <button class="input-btn" title="Attach file">
+                                    📎
+                                </button>
+                                <button class="input-btn" title="Voice input">
+                                    🎤
+                                </button>
+                                <button
+                                    class="input-btn"
+                                    onclick="toggleAdvancedPanel()"
+                                    title="Advanced settings"
+                                >
+                                    ⚙️
+                                </button>
+                                <button
+                                    class="input-btn send-btn"
+                                    title="Send message"
+                                >
+                                    ↑
+                                </button>
+
+                                <!-- Advanced Panel -->
+                                <div class="advanced-panel" id="advancedPanel">
+                                    <div class="advanced-panel-header">
+                                        <span class="advanced-panel-title"
+                                            >Advanced Settings</span
+                                        >
+                                        <button
+                                            class="close-panel-btn"
+                                            onclick="toggleAdvancedPanel()"
+                                        >
+                                            ×
+                                        </button>
+                                    </div>
+
+                                    <div class="option-group">
+                                        <div class="option-label">
+                                            Temperature
+                                        </div>
+                                        <div class="option-slider">
+                                            <div class="slider">
+                                                <div class="slider-fill"></div>
+                                                <div class="slider-thumb"></div>
+                                            </div>
+                                            <span class="slider-value"
+                                                >0.7</span
+                                            >
+                                        </div>
+                                    </div>
+
+                                    <div class="option-group">
+                                        <div class="option-label">
+                                            Max Length
+                                        </div>
+                                        <div class="option-slider">
+                                            <div class="slider">
+                                                <div
+                                                    class="slider-fill"
+                                                    style="width: 50%"
+                                                ></div>
+                                                <div
+                                                    class="slider-thumb"
+                                                    style="left: 50%"
+                                                ></div>
+                                            </div>
+                                            <span class="slider-value"
+                                                >2048</span
+                                            >
+                                        </div>
+                                    </div>
+
+                                    <div class="option-group">
+                                        <div class="option-label">Top P</div>
+                                        <div class="option-slider">
+                                            <div class="slider">
+                                                <div
+                                                    class="slider-fill"
+                                                    style="width: 100%"
+                                                ></div>
+                                                <div
+                                                    class="slider-thumb"
+                                                    style="left: 100%"
+                                                ></div>
+                                            </div>
+                                            <span class="slider-value"
+                                                >1.0</span
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <script>
+            // Toggle model dropdown
+            function toggleModelDropdown() {
+                const dropdown = document.getElementById("modelDropdown");
+                dropdown.classList.toggle("show");
+            }
+
+            // Toggle advanced panel
+            function toggleAdvancedPanel() {
+                const panel = document.getElementById("advancedPanel");
+                panel.classList.toggle("show");
+            }
+
+            // Close dropdowns when clicking outside
+            document.addEventListener("click", function (event) {
+                if (!event.target.closest(".integrated-model-selector")) {
+                    document
+                        .getElementById("modelDropdown")
+                        .classList.remove("show");
+                }
+                if (!event.target.closest(".integrated-input-actions")) {
+                    document
+                        .getElementById("advancedPanel")
+                        .classList.remove("show");
+                }
+            });
+
+            // Auto-resize textarea
+            const textarea = document.querySelector(".chat-input");
+            textarea.addEventListener("input", function () {
+                this.style.height = "auto";
+                this.style.height = this.scrollHeight + "px";
+            });
+        </script>
+    </body>
+</html>
