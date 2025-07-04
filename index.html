@@ -38,9 +38,18 @@
                     #2d1b69 50%,
                     #0f3460 100%
                 );
-                height: 100vh;
-                overflow: hidden;
+                background-attachment: fixed;
                 color: var(--text-primary);
+            }
+
+            .orb-container {
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: -10;
+                overflow: hidden;
+                width: 100%;
+                height: 100vh;
             }
 
             .background-orb {
@@ -65,19 +74,6 @@
             }
 
             .orb-2 {
-                width: 400px;
-                height: 400px;
-                background: radial-gradient(
-                    circle,
-                    rgba(147, 51, 234, 0.4) 0%,
-                    transparent 70%
-                );
-                bottom: -100px;
-                right: -100px;
-                animation-delay: 7s;
-            }
-
-            .orb-3 {
                 width: 300px;
                 height: 300px;
                 background: radial-gradient(
@@ -91,9 +87,17 @@
                 animation-delay: 14s;
             }
 
-            .container {
-                display: flex;
-                height: 100vh;
+            .orb-3 {
+                width: 400px;
+                height: 400px;
+                background: radial-gradient(
+                    circle,
+                    rgba(147, 51, 234, 0.4) 0%,
+                    transparent 70%
+                );
+                bottom: -100px;
+                right: -100px;
+                animation-delay: 7s;
             }
 
             button {
@@ -140,6 +144,9 @@
                 background: var(--glass-ultra-light);
                 backdrop-filter: blur(2.4rem);
                 border-right: 1px solid var(--glass-border);
+                position: fixed;
+                height: 100vh;
+                width: 4rem;
             }
 
             .sidebar-collapsed button {
@@ -170,7 +177,8 @@
                 background: var(--glass-ultra-light);
                 backdrop-filter: blur(2.4rem);
                 border-right: 1px solid var(--glass-border);
-                /* transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); */
+                position: fixed;
+                height: 100vh;
             }
 
             .logo-container {
@@ -406,7 +414,7 @@
 
             .searchDialog {
                 background: var(--glass-white);
-                backdrop-filter: blur(10px);
+                backdrop-filter: blur(50px);
                 border: 1px solid var(--glass-border);
                 border-radius: 1rem;
                 width: 42rem;
@@ -517,31 +525,36 @@
             }
 
             main {
+                margin-left: 20rem;
+            }
+
+            .main-margin-collapsed-sidebar {
+                margin-left: 4rem !important;
+            }
+
+            .wrapper {
                 width: 60rem;
                 margin: 0 auto;
                 padding: 1rem;
-                position: relative;
-                height: 100vh;
                 display: flex;
                 flex-direction: column;
             }
 
             .text-input-container {
-                position: absolute;
-                width: 100%;
-                bottom: 0;
+                position: fixed;
+                width: 58rem;
+                bottom: 0.7rem;
                 z-index: 10;
-                margin-bottom: 0.7rem;
             }
 
             .textarea-container {
                 background: var(--glass-white);
-                backdrop-filter: blur(10px);
+                backdrop-filter: blur(20px);
                 border: 1px solid var(--glass-border);
                 border-radius: 1rem;
                 width: 100%;
                 padding: 1rem;
-                margin: 0.5rem;
+                margin-bottom: 0.5rem;
             }
 
             .disclaimer {
@@ -561,15 +574,6 @@
             .textarea-container textarea::placeholder {
                 color: var(--text-secondary);
                 opacity: 1; /* Firefox */
-            }
-
-            textarea {
-                field-sizing: content; /* auto-expand both directions */ /* modern */
-                line-height: 1.2rem;
-                max-height: calc(
-                    1.2rem * 20
-                ); /* stop after N lines                     */
-                overflow-y: auto; /* honour scrollbar once limit is reached */
             }
 
             .toolbar {
@@ -714,9 +718,11 @@
         ></script>
     </head>
     <body>
-        <div class="background-orb orb-1"></div>
-        <div class="background-orb orb-2"></div>
-        <div class="background-orb orb-3"></div>
+        <div class="orb-container">
+            <div class="background-orb orb-1"></div>
+            <div class="background-orb orb-2"></div>
+            <div class="background-orb orb-3"></div>
+        </div>
 
         <div
             class="container"
@@ -1880,86 +1886,173 @@
                 </div>
             </aside>
 
-            <main>
-                <h1>Hello World</h1>
-                <div class="text-input-container" x-data="{ content: '' }">
-                    <div class="textarea-container">
-                        <form>
-                            <textarea
-                                placeholder="Type your message here..."
-                                x-model="content"
-                            ></textarea>
+            <main :class="sidebarOpen || 'main-margin-collapsed-sidebar'">
+                <div class="wrapper">
+                    <div class="text-input-container" x-data="{ content: '' }">
+                        <div class="textarea-container">
+                            <form>
+                                <textarea
+                                    placeholder="Type your message here..."
+                                    x-model="content"
+                                ></textarea>
 
-                            <div class="toolbar">
-                                <div class="model-settings">
-                                    <button class="model">
-                                        <!-- <div class="model-list">
-                                            <ul>
-                                                <li>
-                                                    Granite 3.3 8B
-                                                    <span
-                                                        class="model-feature-list"
-                                                    >
+                                <div class="toolbar">
+                                    <div class="model-settings">
+                                        <button class="model">
+                                            <!-- <div class="model-list">
+                                                <ul>
+                                                    <li>
+                                                        Granite 3.3 8B
                                                         <span
-                                                            class="model-feature-thinking"
-                                                            ><svg
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                width="24"
-                                                                height="24"
-                                                                viewBox="0 0 24 24"
-                                                            >
-                                                                <g
-                                                                    fill="none"
-                                                                    stroke="currentColor"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                    stroke-width="2"
+                                                            class="model-feature-list"
+                                                        >
+                                                            <span
+                                                                class="model-feature-thinking"
+                                                                ><svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    width="24"
+                                                                    height="24"
+                                                                    viewBox="0 0 24 24"
                                                                 >
-                                                                    <path
-                                                                        d="M12 5a3 3 0 1 0-5.997.125a4 4 0 0 0-2.526 5.77a4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"
-                                                                    />
-                                                                    <path
-                                                                        d="M12 5a3 3 0 1 1 5.997.125a4 4 0 0 1 2.526 5.77a4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"
-                                                                    />
-                                                                    <path
-                                                                        d="M15 13a4.5 4.5 0 0 1-3-4a4.5 4.5 0 0 1-3 4m8.599-6.5a3 3 0 0 0 .399-1.375m-11.995 0A3 3 0 0 0 6.401 6.5m-2.924 4.396a4 4 0 0 1 .585-.396m15.876 0a4 4 0 0 1 .585.396M6 18a4 4 0 0 1-1.967-.516m15.934 0A4 4 0 0 1 18 18"
-                                                                    />
-                                                                </g></svg
-                                                        ></span>
-                                                        <span
-                                                            class="model-feature-vision"
-                                                            ><svg
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                width="24"
-                                                                height="24"
-                                                                viewBox="0 0 24 24"
-                                                            >
-                                                                <g
-                                                                    fill="none"
-                                                                    stroke="currentColor"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                    stroke-width="2"
+                                                                    <g
+                                                                        fill="none"
+                                                                        stroke="currentColor"
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round"
+                                                                        stroke-width="2"
+                                                                    >
+                                                                        <path
+                                                                            d="M12 5a3 3 0 1 0-5.997.125a4 4 0 0 0-2.526 5.77a4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"
+                                                                        />
+                                                                        <path
+                                                                            d="M12 5a3 3 0 1 1 5.997.125a4 4 0 0 1 2.526 5.77a4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"
+                                                                        />
+                                                                        <path
+                                                                            d="M15 13a4.5 4.5 0 0 1-3-4a4.5 4.5 0 0 1-3 4m8.599-6.5a3 3 0 0 0 .399-1.375m-11.995 0A3 3 0 0 0 6.401 6.5m-2.924 4.396a4 4 0 0 1 .585-.396m15.876 0a4 4 0 0 1 .585.396M6 18a4 4 0 0 1-1.967-.516m15.934 0A4 4 0 0 1 18 18"
+                                                                        />
+                                                                    </g></svg
+                                                            ></span>
+                                                            <span
+                                                                class="model-feature-vision"
+                                                                ><svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    width="24"
+                                                                    height="24"
+                                                                    viewBox="0 0 24 24"
                                                                 >
-                                                                    <path
-                                                                        d="M2.062 12.348a1 1 0 0 1 0-.696a10.75 10.75 0 0 1 19.876 0a1 1 0 0 1 0 .696a10.75 10.75 0 0 1-19.876 0"
-                                                                    />
-                                                                    <circle
-                                                                        cx="12"
-                                                                        cy="12"
-                                                                        r="3"
-                                                                    />
-                                                                </g></svg
-                                                        ></span>
-                                                    </span>
-                                                </li>
-                                                <li>Mistral 0.3 7B</li>
-                                                <li>Gwen 3 24B</li>
-                                                <li>Gemma 3 14B</li>
-                                            </ul>
-                                        </div> -->
+                                                                    <g
+                                                                        fill="none"
+                                                                        stroke="currentColor"
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round"
+                                                                        stroke-width="2"
+                                                                    >
+                                                                        <path
+                                                                            d="M2.062 12.348a1 1 0 0 1 0-.696a10.75 10.75 0 0 1 19.876 0a1 1 0 0 1 0 .696a10.75 10.75 0 0 1-19.876 0"
+                                                                        />
+                                                                        <circle
+                                                                            cx="12"
+                                                                            cy="12"
+                                                                            r="3"
+                                                                        />
+                                                                    </g></svg
+                                                            ></span>
+                                                        </span>
+                                                    </li>
+                                                    <li>Mistral 0.3 7B</li>
+                                                    <li>Gwen 3 24B</li>
+                                                    <li>Gemma 3 14B</li>
+                                                </ul>
+                                            </div> -->
 
-                                        Granite 3.3 8B
+                                            Granite 3.3 8B
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="m6 9l6 6l6-6"
+                                                />
+                                            </svg>
+                                        </button>
+
+                                        <input
+                                            type="checkbox"
+                                            id="temporary-chat"
+                                            name="temporary-chat"
+                                            class="model-settings-checkbox"
+                                        />
+                                        <label
+                                            for="temporary-chat"
+                                            class="model-settings-label"
+                                            title="Turn on temporary chat"
+                                            ><svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M13.5 3.1c-.5 0-1-.1-1.5-.1s-1 .1-1.5.1m8.8 3.7a10.5 10.5 0 0 0-2.1-2.1m3.7 8.8c.1-.5.1-1 .1-1.5s-.1-1-.1-1.5m-3.7 8.8a10.5 10.5 0 0 0 2.1-2.1m-8.8 3.7c.5.1 1 .1 1.5.1s1-.1 1.5-.1m-10-3.4L2 22l4.5-1.5m-3.4-10c0 .5-.1 1-.1 1.5s.1 1 .1 1.5m3.7-8.8a10.5 10.5 0 0 0-2.1 2.1"
+                                                /></svg
+                                        ></label>
+
+                                        <input
+                                            type="checkbox"
+                                            id="thinking"
+                                            name="thinking"
+                                            class="model-settings-checkbox"
+                                        />
+                                        <label
+                                            for="thinking"
+                                            class="model-settings-label"
+                                            title="Enable thinking mode"
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <g
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                >
+                                                    <path
+                                                        d="M12 5a3 3 0 1 0-5.997.125a4 4 0 0 0-2.526 5.77a4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"
+                                                    />
+                                                    <path
+                                                        d="M12 5a3 3 0 1 1 5.997.125a4 4 0 0 1 2.526 5.77a4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"
+                                                    />
+                                                    <path
+                                                        d="M15 13a4.5 4.5 0 0 1-3-4a4.5 4.5 0 0 1-3 4m8.599-6.5a3 3 0 0 0 .399-1.375m-11.995 0A3 3 0 0 0 6.401 6.5m-2.924 4.396a4 4 0 0 1 .585-.396m15.876 0a4 4 0 0 1 .585.396M6 18a4 4 0 0 1-1.967-.516m15.934 0A4 4 0 0 1 18 18"
+                                                    />
+                                                </g>
+                                            </svg>
+                                            Thinking
+                                        </label>
+                                    </div>
+                                    <button
+                                        class="send-btn"
+                                        type="submit"
+                                        disabled
+                                        x-bind:disabled="!content.length"
+                                    >
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             width="24"
@@ -1972,102 +2065,16 @@
                                                 stroke-linecap="round"
                                                 stroke-linejoin="round"
                                                 stroke-width="2"
-                                                d="m6 9l6 6l6-6"
+                                                d="m5 12l7-7l7 7m-7 7V5"
                                             />
                                         </svg>
                                     </button>
-
-                                    <input
-                                        type="checkbox"
-                                        id="temporary-chat"
-                                        name="temporary-chat"
-                                        class="model-settings-checkbox"
-                                    />
-                                    <label
-                                        for="temporary-chat"
-                                        class="model-settings-label"
-                                        title="Turn on temporary chat"
-                                        ><svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                fill="none"
-                                                stroke="currentColor"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M13.5 3.1c-.5 0-1-.1-1.5-.1s-1 .1-1.5.1m8.8 3.7a10.5 10.5 0 0 0-2.1-2.1m3.7 8.8c.1-.5.1-1 .1-1.5s-.1-1-.1-1.5m-3.7 8.8a10.5 10.5 0 0 0 2.1-2.1m-8.8 3.7c.5.1 1 .1 1.5.1s1-.1 1.5-.1m-10-3.4L2 22l4.5-1.5m-3.4-10c0 .5-.1 1-.1 1.5s.1 1 .1 1.5m3.7-8.8a10.5 10.5 0 0 0-2.1 2.1"
-                                            /></svg
-                                    ></label>
-
-                                    <input
-                                        type="checkbox"
-                                        id="thinking"
-                                        name="thinking"
-                                        class="model-settings-checkbox"
-                                    />
-                                    <label
-                                        for="thinking"
-                                        class="model-settings-label"
-                                        title="Enable thinking mode"
-                                    >
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <g
-                                                fill="none"
-                                                stroke="currentColor"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                            >
-                                                <path
-                                                    d="M12 5a3 3 0 1 0-5.997.125a4 4 0 0 0-2.526 5.77a4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"
-                                                />
-                                                <path
-                                                    d="M12 5a3 3 0 1 1 5.997.125a4 4 0 0 1 2.526 5.77a4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"
-                                                />
-                                                <path
-                                                    d="M15 13a4.5 4.5 0 0 1-3-4a4.5 4.5 0 0 1-3 4m8.599-6.5a3 3 0 0 0 .399-1.375m-11.995 0A3 3 0 0 0 6.401 6.5m-2.924 4.396a4 4 0 0 1 .585-.396m15.876 0a4 4 0 0 1 .585.396M6 18a4 4 0 0 1-1.967-.516m15.934 0A4 4 0 0 1 18 18"
-                                                />
-                                            </g>
-                                        </svg>
-                                        Thinking
-                                    </label>
                                 </div>
-                                <button
-                                    class="send-btn"
-                                    type="submit"
-                                    disabled
-                                    x-bind:disabled="!content.length"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            fill="none"
-                                            stroke="currentColor"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="m5 12l7-7l7 7m-7 7V5"
-                                        />
-                                    </svg>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="disclaimer">
-                        AI can make mistakes. Please double-check responses.
+                            </form>
+                        </div>
+                        <div class="disclaimer">
+                            AI can make mistakes. Please double-check responses.
+                        </div>
                     </div>
                 </div>
             </main>
