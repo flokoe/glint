@@ -726,14 +726,56 @@
                     rgba(88, 86, 214, 0.15) 100%
                 );
                 border: 1px solid rgba(0, 122, 255, 0.3);
+                min-width: 8rem;
                 max-width: 40rem;
-                align-self: end;
             }
 
             .message.assistant {
                 background: var(--glass-white);
                 border: 1px solid var(--glass-border);
                 box-shadow: 0 8px 30px var(--shadow-soft);
+            }
+
+            .message-container {
+                display: flex;
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+
+            .message-container.user {
+                align-items: end;
+            }
+
+            .message-options {
+                display: flex;
+                align-items: center;
+                gap: 0.3rem;
+                margin: 0 1rem;
+            }
+
+            .message-options button {
+                width: 1.8rem;
+                height: 1.8rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0.3rem;
+                border-radius: 0.5rem;
+                cursor: pointer;
+                border: 1px solid transparent;
+                background: transparent;
+                color: var(--text-primary);
+                transition: all 0.3s ease;
+            }
+
+            .message-options button:hover {
+                background: var(--glass-white);
+            }
+
+            .output-model {
+                font-size: 0.9rem;
+                font-weight: bold;
+                color: var(--text-secondary);
             }
         </style>
 
@@ -1920,282 +1962,502 @@
             <main :class="sidebarOpen || 'main-margin-collapsed-sidebar'">
                 <div class="wrapper">
                     <div class="messages">
-                        <div class="message user">
-                            Can you help me create a React component for a
-                            modern dashboard?
+                        <div class="message-container user">
+                            <div class="message user">
+                                Can you help me create a React component for a
+                                modern dashboard?
+                            </div>
+                            <div class="message-options user">
+                                <button title="Copy message">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <g
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                        >
+                                            <rect
+                                                width="14"
+                                                height="14"
+                                                x="8"
+                                                y="8"
+                                                rx="2"
+                                                ry="2"
+                                            />
+                                            <path
+                                                d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                                            />
+                                        </g>
+                                    </svg>
+                                </button>
+                                <button title="Branch off">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <g
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                        >
+                                            <path d="M6 3v12" />
+                                            <circle cx="18" cy="6" r="3" />
+                                            <circle cx="6" cy="18" r="3" />
+                                            <path d="M18 9a9 9 0 0 1-9 9" />
+                                        </g>
+                                    </svg>
+                                </button>
+                                <button title="Edit message">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"
+                                        />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
-                        <div class="message assistant">
-                            <h1>
-                                Wood alarm fleet smack we've comforts Greenwood
-                                succeed.
-                            </h1>
-                            <p>
-                                Test mortal Midsummer's Eve stood cowards.
-                                Disappeared places went moonlight far province
-                                wishing Gondolin dunghill. Today is my 111th
-                                birthday! Wargs third thousands world spawning?
-                            </p>
-                            <h2>
-                                Higher removed Ithildin burned torturing joined
-                                sat.
-                            </h2>
-                            <p>
-                                And what about very old friends? Refused despair
-                                drink vanquished thin help Gondor's busy glory
-                                flurgaburburhobbit rights. God twisted showing.
-                                Wrath Legolas happily encampment?
-                            </p>
-                            <h3>
-                                High manage Bracegirdles sound confusticate
-                                boned.
-                            </h3>
-                            <p>
-                                Caradhras begged threat done bars. Screams
-                                blossom starters city shine moldy foot king
-                                Nûmenor potatoes prong mingled. Garb Gaffer
-                                sulfur tunnel number battles ever fool's
-                                overreacting someone filleting. All we have to
-                                decide is what to do with the time that is given
-                                to us.
-                            </p>
-                            <ul>
-                                <li>Barad-dur.</li>
-                                <li>Smeagol.</li>
-                                <li>Bilbo's.</li>
-                                <li>Gollum's?</li>
-                                <li>Luthien.</li>
-                            </ul>
-                            <ul>
-                                <li>
-                                    Shone poisoned 300 foul air Wargs hung
-                                    splintered simply.
-                                </li>
-                                <li>Sunlight firm tries towers King's.</li>
-                                <li>
-                                    Shattered arrives Saruman's noises blanket
-                                    ensnared let!
-                                </li>
-                                <li>
-                                    Seek whip Grubbs honest some ends motion.
-                                </li>
-                                <li>
-                                    Prong ground Chubbs contend sharpened horses
-                                    knocked gets after stupidity.
-                                </li>
-                            </ul>
-                            <h3>
-                                Dain blame grip safest unequaled burn evacuate.
-                            </h3>
-                            <p>
-                                Bygone Elendil dragons. You are full of
-                                surprises, Master Baggins. Stating nose Denethor
-                                ales stairs parting imaginable make iron-forged
-                                password.
-                            </p>
-                            <ol>
-                                <li>Oin?</li>
-                                <li>Concerning Hobbits.</li>
-                                <li>Thror.</li>
-                                <li>Dimrill.</li>
-                                <li>Arwen's.</li>
-                            </ol>
-                            <ol>
-                                <li>
-                                    Feed alas certainly voice wastelands wanting
-                                    Glóin.
-                                </li>
-                                <li>
-                                    Army hastens bunch curse what's Éowyn spared
-                                    obvious!
-                                </li>
-                                <li>
-                                    Stealing Gamgee craft tangle halls finally
-                                    trail nags thieves shame.
-                                </li>
-                                <li>
-                                    Smoking bitter host filth advance vest
-                                    crossed meat's ensnare Arwen's.
-                                </li>
-                                <li>Master songs eight onto Sauron.</li>
-                            </ol>
-                            <h3>
-                                Waiting committees draught stamp soft Aragorn!
-                            </h3>
-                            <p>
-                                40 Radagast the Brown snap hidden entered figure
-                                shadows 22nd knocks melt. Everyone known haven't
-                                Bucklebury captive smell something. There is
-                                only one Lord of the Ring. Well-earned
-                                immediately juice presumed waged still battle
-                                what'll linger covers bolted Gandalf's.
-                            </p>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>Deluge</th>
-                                        <th>Stamp</th>
-                                        <th>Counter</th>
-                                        <th>Fireflies</th>
-                                        <th>Disappointment</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Change</td>
-                                        <td>total</td>
-                                        <td>clever</td>
-                                        <td>hands</td>
-                                        <td>examine</td>
-                                        <td>wriggling</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Device</td>
-                                        <td>bred</td>
-                                        <td>seasoning</td>
-                                        <td>protect</td>
-                                        <td>freely</td>
-                                        <td>survived</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Food</td>
-                                        <td>fade</td>
-                                        <td>involved</td>
-                                        <td>took</td>
-                                        <td>awoken</td>
-                                        <td>weary</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Forging</td>
-                                        <td>meats</td>
-                                        <td>devilry</td>
-                                        <td>cream</td>
-                                        <td>several</td>
-                                        <td>entrance</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Cursed</td>
-                                        <td>16</td>
-                                        <td>seldom</td>
-                                        <td>gift</td>
-                                        <td>stealth</td>
-                                        <td>line</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Told</td>
-                                        <td>he</td>
-                                        <td>flesh</td>
-                                        <td>black</td>
-                                        <td>recall</td>
-                                        <td>mortality</td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td>view</td>
-                                        <td>gnaws</td>
-                                        <td>can't</td>
-                                        <td>stupidity</td>
-                                        <td>perish</td>
-                                        <td>outskirts</td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                            <h4>Chamomile taught Bard hammering vest sees.</h4>
-                            <p>
-                                Bought payment bitterness sawed looked She-Elf
-                                course triumphant. Worst parasites earned heir
-                                birthday Wargs longer eyeses made. Fly, you
-                                fools! Fishermen listen Orcrist lowly remove
-                                solitude center why pines swore empty.
-                            </p>
-                            <blockquote>
-                                <p>What's the Elvish word for 'friend'?</p>
-                                <footer>
-                                    —Front, <cite>almost appears</cite>
-                                </footer>
-                            </blockquote>
-                            <h5>
-                                Grateful giant skin-changer appears map pauses
-                                hearth Undómiel.
-                            </h5>
-                            <p>
-                                Exchanged count Warg dominion warning piled
-                                ringing! Fly, you fools! Expect broken mine's
-                                searching poisonous missed examine listening
-                                Middle-earth endured 600.
-                            </p>
-                            <pre>
+
+                        <div class="message-container">
+                            <div class="message assistant">
+                                <h1>
+                                    Wood alarm fleet smack we've comforts
+                                    Greenwood succeed.
+                                </h1>
+                                <p>
+                                    Test mortal Midsummer's Eve stood cowards.
+                                    Disappeared places went moonlight far
+                                    province wishing Gondolin dunghill. Today is
+                                    my 111th birthday! Wargs third thousands
+                                    world spawning?
+                                </p>
+                                <h2>
+                                    Higher removed Ithildin burned torturing
+                                    joined sat.
+                                </h2>
+                                <p>
+                                    And what about very old friends? Refused
+                                    despair drink vanquished thin help Gondor's
+                                    busy glory flurgaburburhobbit rights. God
+                                    twisted showing. Wrath Legolas happily
+                                    encampment?
+                                </p>
+                                <h3>
+                                    High manage Bracegirdles sound confusticate
+                                    boned.
+                                </h3>
+                                <p>
+                                    Caradhras begged threat done bars. Screams
+                                    blossom starters city shine moldy foot king
+                                    Nûmenor potatoes prong mingled. Garb Gaffer
+                                    sulfur tunnel number battles ever fool's
+                                    overreacting someone filleting. All we have
+                                    to decide is what to do with the time that
+                                    is given to us.
+                                </p>
+                                <ul>
+                                    <li>Barad-dur.</li>
+                                    <li>Smeagol.</li>
+                                    <li>Bilbo's.</li>
+                                    <li>Gollum's?</li>
+                                    <li>Luthien.</li>
+                                </ul>
+                                <ul>
+                                    <li>
+                                        Shone poisoned 300 foul air Wargs hung
+                                        splintered simply.
+                                    </li>
+                                    <li>Sunlight firm tries towers King's.</li>
+                                    <li>
+                                        Shattered arrives Saruman's noises
+                                        blanket ensnared let!
+                                    </li>
+                                    <li>
+                                        Seek whip Grubbs honest some ends
+                                        motion.
+                                    </li>
+                                    <li>
+                                        Prong ground Chubbs contend sharpened
+                                        horses knocked gets after stupidity.
+                                    </li>
+                                </ul>
+                                <h3>
+                                    Dain blame grip safest unequaled burn
+                                    evacuate.
+                                </h3>
+                                <p>
+                                    Bygone Elendil dragons. You are full of
+                                    surprises, Master Baggins. Stating nose
+                                    Denethor ales stairs parting imaginable make
+                                    iron-forged password.
+                                </p>
+                                <ol>
+                                    <li>Oin?</li>
+                                    <li>Concerning Hobbits.</li>
+                                    <li>Thror.</li>
+                                    <li>Dimrill.</li>
+                                    <li>Arwen's.</li>
+                                </ol>
+                                <ol>
+                                    <li>
+                                        Feed alas certainly voice wastelands
+                                        wanting Glóin.
+                                    </li>
+                                    <li>
+                                        Army hastens bunch curse what's Éowyn
+                                        spared obvious!
+                                    </li>
+                                    <li>
+                                        Stealing Gamgee craft tangle halls
+                                        finally trail nags thieves shame.
+                                    </li>
+                                    <li>
+                                        Smoking bitter host filth advance vest
+                                        crossed meat's ensnare Arwen's.
+                                    </li>
+                                    <li>Master songs eight onto Sauron.</li>
+                                </ol>
+                                <h3>
+                                    Waiting committees draught stamp soft
+                                    Aragorn!
+                                </h3>
+                                <p>
+                                    40 Radagast the Brown snap hidden entered
+                                    figure shadows 22nd knocks melt. Everyone
+                                    known haven't Bucklebury captive smell
+                                    something. There is only one Lord of the
+                                    Ring. Well-earned immediately juice presumed
+                                    waged still battle what'll linger covers
+                                    bolted Gandalf's.
+                                </p>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Deluge</th>
+                                            <th>Stamp</th>
+                                            <th>Counter</th>
+                                            <th>Fireflies</th>
+                                            <th>Disappointment</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Change</td>
+                                            <td>total</td>
+                                            <td>clever</td>
+                                            <td>hands</td>
+                                            <td>examine</td>
+                                            <td>wriggling</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Device</td>
+                                            <td>bred</td>
+                                            <td>seasoning</td>
+                                            <td>protect</td>
+                                            <td>freely</td>
+                                            <td>survived</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Food</td>
+                                            <td>fade</td>
+                                            <td>involved</td>
+                                            <td>took</td>
+                                            <td>awoken</td>
+                                            <td>weary</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Forging</td>
+                                            <td>meats</td>
+                                            <td>devilry</td>
+                                            <td>cream</td>
+                                            <td>several</td>
+                                            <td>entrance</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Cursed</td>
+                                            <td>16</td>
+                                            <td>seldom</td>
+                                            <td>gift</td>
+                                            <td>stealth</td>
+                                            <td>line</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Told</td>
+                                            <td>he</td>
+                                            <td>flesh</td>
+                                            <td>black</td>
+                                            <td>recall</td>
+                                            <td>mortality</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td>view</td>
+                                            <td>gnaws</td>
+                                            <td>can't</td>
+                                            <td>stupidity</td>
+                                            <td>perish</td>
+                                            <td>outskirts</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                <h4>
+                                    Chamomile taught Bard hammering vest sees.
+                                </h4>
+                                <p>
+                                    Bought payment bitterness sawed looked
+                                    She-Elf course triumphant. Worst parasites
+                                    earned heir birthday Wargs longer eyeses
+                                    made. Fly, you fools! Fishermen listen
+                                    Orcrist lowly remove solitude center why
+                                    pines swore empty.
+                                </p>
+                                <blockquote>
+                                    <p>What's the Elvish word for 'friend'?</p>
+                                    <footer>
+                                        —Front, <cite>almost appears</cite>
+                                    </footer>
+                                </blockquote>
+                                <h5>
+                                    Grateful giant skin-changer appears map
+                                    pauses hearth Undómiel.
+                                </h5>
+                                <p>
+                                    Exchanged count Warg dominion warning piled
+                                    ringing! Fly, you fools! Expect broken
+                                    mine's searching poisonous missed examine
+                                    listening Middle-earth endured 600.
+                                </p>
+                                <pre>
 Heavy rat values Iáve. Pages tune Silvan offer fight. Rubble Barad-dûr behind jacketses proof raze.</pre
-                            >
-                            <h6>
-                                Handsome under dur-rugnu moaning famished
-                                Hornblowers happened.
-                            </h6>
-                            <p>
-                                <dfn>Barahir Bru-ra-hroom</dfn> cultured lit
-                                gets overhead mountainside. Elros whether left
-                                judgment
-                                <del>succumb rode descendant wax</del> riddles.
-                                Reserves <code>sprinkle hiding</code> he's
-                                Riddermark. Force Cair every
-                                <q>animals foothold</q>. Ere renowned lake trees
-                                <sub>sadness</sub>?
-                                <strong
-                                    >Wagers reaction handkerchief handkerchiefs
-                                    there'll</strong
                                 >
-                                Bard lordship kindled. Attention reserves
-                                adventure Merry <samp>wiser desecrate</samp>!
-                                Barad-dur stirring <kbd>A</kbd> missing. Army
-                                reign young does kindly
-                                <ins>Gentlemen Sigrid East-farthing</ins>.
-                                Doesn't thousands armories boiling unfought
-                                <cite
-                                    >Misty Mountain Snowbourn Edge Bagshot
-                                    Row</cite
-                                >. <abbr>Ere</abbr> you'd felt keepsakes. Hangs
-                                Láthspell boats strength
-                                <mark>wheels bitterness</mark>. Fun justice
-                                <em>kindly received</em> powers Longshanks
-                                chamomile. Ring-bearer both leaderless slinker
-                                <sup>presses</sup>. Captain hardy
-                                <a>walls brave memory drove went</a> dragon
-                                enjoy! Keen sewer <time>Mearas</time> luck rain.
-                                Guts <small>imagine order across</small> signs
-                                Meriadoc. Goodwill unleashed
-                                <var>feelings</var> shade Argonath.
-                            </p>
-                            <hr />
-                            <dl>
-                                <dt>Marched</dt>
-                                <dd>
-                                    Earendil feel hunt flying echoes already
-                                    joined track.
-                                </dd>
-                                <dt>Blessing</dt>
-                                <dd>
-                                    Unfought built treasures Samwise multiplied
-                                    thunder center belonging deem.
-                                </dd>
-                                <dd>
-                                    Bifur become hinder envelope interest
-                                    loosened point bloom listening.
-                                </dd>
-                                <dt>It</dt>
-                                <dd>
-                                    Appear jacksie paid Took loosened candles
-                                    cave perfectly.
-                                </dd>
-                                <dd>
-                                    Put Precious spawn strategic meat entered
-                                    pain armies.
-                                </dd>
-                                <dd>
-                                    Purge claws reclaim recall palantir
-                                    retribution felt mushrooms Frodo waste.
-                                </dd>
-                            </dl>
+                                <h6>
+                                    Handsome under dur-rugnu moaning famished
+                                    Hornblowers happened.
+                                </h6>
+                                <p>
+                                    <dfn>Barahir Bru-ra-hroom</dfn> cultured lit
+                                    gets overhead mountainside. Elros whether
+                                    left judgment
+                                    <del>succumb rode descendant wax</del>
+                                    riddles. Reserves
+                                    <code>sprinkle hiding</code> he's
+                                    Riddermark. Force Cair every
+                                    <q>animals foothold</q>. Ere renowned lake
+                                    trees <sub>sadness</sub>?
+                                    <strong
+                                        >Wagers reaction handkerchief
+                                        handkerchiefs there'll</strong
+                                    >
+                                    Bard lordship kindled. Attention reserves
+                                    adventure Merry
+                                    <samp>wiser desecrate</samp>! Barad-dur
+                                    stirring <kbd>A</kbd> missing. Army reign
+                                    young does kindly
+                                    <ins>Gentlemen Sigrid East-farthing</ins>.
+                                    Doesn't thousands armories boiling unfought
+                                    <cite
+                                        >Misty Mountain Snowbourn Edge Bagshot
+                                        Row</cite
+                                    >. <abbr>Ere</abbr> you'd felt keepsakes.
+                                    Hangs Láthspell boats strength
+                                    <mark>wheels bitterness</mark>. Fun justice
+                                    <em>kindly received</em> powers Longshanks
+                                    chamomile. Ring-bearer both leaderless
+                                    slinker <sup>presses</sup>. Captain hardy
+                                    <a>walls brave memory drove went</a> dragon
+                                    enjoy! Keen sewer <time>Mearas</time> luck
+                                    rain. Guts
+                                    <small>imagine order across</small> signs
+                                    Meriadoc. Goodwill unleashed
+                                    <var>feelings</var> shade Argonath.
+                                </p>
+                                <hr />
+                                <dl>
+                                    <dt>Marched</dt>
+                                    <dd>
+                                        Earendil feel hunt flying echoes already
+                                        joined track.
+                                    </dd>
+                                    <dt>Blessing</dt>
+                                    <dd>
+                                        Unfought built treasures Samwise
+                                        multiplied thunder center belonging
+                                        deem.
+                                    </dd>
+                                    <dd>
+                                        Bifur become hinder envelope interest
+                                        loosened point bloom listening.
+                                    </dd>
+                                    <dt>It</dt>
+                                    <dd>
+                                        Appear jacksie paid Took loosened
+                                        candles cave perfectly.
+                                    </dd>
+                                    <dd>
+                                        Put Precious spawn strategic meat
+                                        entered pain armies.
+                                    </dd>
+                                    <dd>
+                                        Purge claws reclaim recall palantir
+                                        retribution felt mushrooms Frodo waste.
+                                    </dd>
+                                </dl>
+                            </div>
+
+                            <div class="message-options user">
+                                <button title="Copy message">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <g
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                        >
+                                            <rect
+                                                width="14"
+                                                height="14"
+                                                x="8"
+                                                y="8"
+                                                rx="2"
+                                                ry="2"
+                                            />
+                                            <path
+                                                d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                                            />
+                                        </g>
+                                    </svg>
+                                </button>
+                                <button title="Read aloud">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298zM16 9a5 5 0 0 1 0 6m3.364 3.364a9 9 0 0 0 0-12.728"
+                                        />
+                                    </svg>
+                                </button>
+                                <button title="Share up to this message">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <g
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                        >
+                                            <circle cx="18" cy="5" r="3" />
+                                            <circle cx="6" cy="12" r="3" />
+                                            <circle cx="18" cy="19" r="3" />
+                                            <path
+                                                d="m8.59 13.51l6.83 3.98m-.01-10.98l-6.82 3.98"
+                                            />
+                                        </g>
+                                    </svg>
+                                </button>
+                                <button title="Export up to this message">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M12 3v12m5-7l-5-5l-5 5m14 7v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                                        />
+                                    </svg>
+                                </button>
+                                <button title="Branch off">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <g
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                        >
+                                            <path d="M6 3v12" />
+                                            <circle cx="18" cy="6" r="3" />
+                                            <circle cx="6" cy="18" r="3" />
+                                            <path d="M18 9a9 9 0 0 1-9 9" />
+                                        </g>
+                                    </svg>
+                                </button>
+                                <button title="Retry" class="retry-btn">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <g
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                        >
+                                            <path
+                                                d="M21 12a9 9 0 0 0-9-9a9.75 9.75 0 0 0-6.74 2.74L3 8"
+                                            />
+                                            <path
+                                                d="M3 3v5h5m-5 4a9 9 0 0 0 9 9a9.75 9.75 0 0 0 6.74-2.74L21 16"
+                                            />
+                                            <path d="M16 16h5v5" />
+                                        </g>
+                                    </svg>
+                                </button>
+                                <span class="output-model">Granite 3.3 8B</span>
+                            </div>
                         </div>
                     </div>
 
