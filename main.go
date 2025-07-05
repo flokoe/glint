@@ -4,7 +4,6 @@ package main
 import (
 	"html/template"
 	"io"
-	"net/http"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -18,10 +17,6 @@ type Template struct {
 // Render implements the echo.Renderer interface.
 func (t *Template) Render(w io.Writer, name string, data interface{}, _ echo.Context) error {
 	return t.templates.ExecuteTemplate(w, name, data)
-}
-
-func newChat(c echo.Context) error {
-	return c.Render(http.StatusOK, "new-chat", "Sun")
 }
 
 func main() {
