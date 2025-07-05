@@ -1,0 +1,31 @@
+# EXAMPLE USAGE:
+#
+#   Refer for explanation to following link:
+#   https://lefthook.dev/configuration/
+#
+# pre-push:
+#   jobs:
+#     - name: packages audit
+#       tags:
+#         - frontend
+#         - security
+#       run: yarn audit
+#
+#     - name: gems audit
+#       tags:
+#         - backend
+#         - security
+#       run: bundle audit
+
+pre-commit:
+  jobs:
+    - name: golangci-lint linters
+      glob: "*.go"
+      run: golangci-lint run {staged_files}
+
+    # - name: govulncheck
+    #   run: govulncheck .
+
+    - name: golangci-lint formatters
+      glob: "*.go"
+      run: golangci-lint fmt {staged_files}
