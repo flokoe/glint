@@ -1,0 +1,7 @@
+[build]
+  exclude_dir = ["mockups"]
+
+[proxy]
+  app_port   = 1323
+  enabled    = true
+  proxy_port = 1324

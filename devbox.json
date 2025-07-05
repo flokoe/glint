@@ -4,7 +4,8 @@
     "go@latest",
     "golangci-lint@latest",
     "lefthook@latest",
-    "govulncheck@latest"
+    "govulncheck@latest",
+    "air@latest"
   ],
   "shell": {
     "init_hook": [
