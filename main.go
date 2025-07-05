@@ -2,11 +2,27 @@
 package main
 
 import (
+	"html/template"
+	"io"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
+
+// Template is a custom HTML template renderer for Echo framework.
+type Template struct {
+	templates *template.Template
+}
+
+// Render implements the echo.Renderer interface.
+func (t *Template) Render(w io.Writer, name string, data interface{}, _ echo.Context) error {
+	return t.templates.ExecuteTemplate(w, name, data)
+}
+
+func newChat(c echo.Context) error {
+	return c.Render(http.StatusOK, "new-chat", "Sun")
+}
 
 func main() {
 	e := echo.New()
@@ -16,9 +32,13 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	e.GET("/", func(c echo.Context) error {
-		return c.HTML(http.StatusOK, "<!doctype html><html><head></head><body><h1>Hello World!</h1></body></html>")
-	})
+	t := &Template{
+		templates: template.Must(template.ParseGlob("views/*.html")),
+	}
+
+	e.Renderer = t
+
+	e.GET("/", newChat)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
