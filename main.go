@@ -1,34 +1,40 @@
-// glint - An AI chat web UI
+// Clairvoyance - A web based AI chat UI
+// Copyright (C) 2025 Florian Köhler
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see
+// <https://www.gnu.org/licenses/>.
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
 package main
 
 import (
 	"html/template"
-	"io"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
-// Template is a custom HTML template renderer for Echo framework.
-type Template struct {
-	templates *template.Template
-}
-
-// Render implements the echo.Renderer interface.
-func (t *Template) Render(w io.Writer, name string, data interface{}, _ echo.Context) error {
-	return t.templates.ExecuteTemplate(w, name, data)
-}
-
 func main() {
 	e := echo.New()
-
-	e.Static("/", "public")
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	t := &Template{
-		templates: template.Must(template.ParseGlob("views/*.html")),
+	e.Static("/", "public")
+
+	t := &templateRegistry{
+		templates: template.Must(template.ParseGlob("templates/*.html")),
 	}
 
 	e.Renderer = t
