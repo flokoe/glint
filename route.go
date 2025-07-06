@@ -25,6 +25,8 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
+
+	"github.com/flokoe/clairvoyance/internal/model"
 )
 
 type templateRegistry struct {
@@ -44,48 +46,48 @@ func admin(c echo.Context) error {
 	db := c.Get("db").(*gorm.DB)
 
 	type AdminData struct {
-		Adapters []Adapter
-		Models   []Model
+		Providers []model.Provider
+		LLMs      []model.Llm
 	}
 
 	var data AdminData
 
-	// Fetch the newly created adapter with its models
-	if err := db.Find(&data.Adapters).Error; err != nil {
-		return c.String(http.StatusInternalServerError, "failed to fetch adapter")
+	// Fetch the newly created provider with its models
+	if err := db.Find(&data.Providers).Error; err != nil {
+		return c.String(http.StatusInternalServerError, "failed to fetch provider")
 	}
 
 	return c.Render(http.StatusOK, "admin.html", data)
 }
 
-type adapterDTO struct {
-	Type string `form:"adapterType"`
-	URL  string `form:"adapterUrl"`
+type providerDTO struct {
+	Type string `form:"providerType"`
+	URL  string `form:"providerUrl"`
 }
 
-func addAdapter(c echo.Context) error {
+func addProvider(c echo.Context) error {
 	db := c.Get("db").(*gorm.DB)
 
-	a := new(adapterDTO)
+	a := new(providerDTO)
 	if err := c.Bind(a); err != nil {
 		return c.String(http.StatusBadRequest, "bad request")
 	}
 
 	// Load into separate struct for security
-	adapter := Adapter{
+	provider := model.Provider{
 		Type: a.Type,
 		URL:  a.URL,
 	}
 
-	if err := db.Create(&adapter).Error; err != nil {
-		return c.String(http.StatusInternalServerError, "failed to create adapter")
+	if err := db.Create(&provider).Error; err != nil {
+		return c.String(http.StatusInternalServerError, "failed to create provider")
 	}
 
-	// Fetch the newly created adapter with its models
-	var adapters []Adapter
-	if err := db.Find(&adapters).Error; err != nil {
-		return c.String(http.StatusInternalServerError, "failed to fetch adapter")
+	// Fetch the newly created provider with its models
+	var providers []model.Provider
+	if err := db.Find(&providers).Error; err != nil {
+		return c.String(http.StatusInternalServerError, "failed to fetch provider")
 	}
 
-	return c.Render(http.StatusOK, "adapterTable.html", adapters)
+	return c.Render(http.StatusOK, "providerTable.html", providers)
 }

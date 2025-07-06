@@ -12,13 +12,13 @@
 <body>
     <h1>Admin Dashboard</h1>
 
-    <h2>List of available models</h2>
+    <h2>List of available LLMs</h2>
 
-    {{ with .Models }}
+    {{ with .LLMs }}
     <table border="1" cellpadding="5">
         <thead>
             <tr>
-                <th>Adapter</th>
+                <th>Provider</th>
                 <th>Name</th>
                 <th>String</th>
                 <th>Context Size</th>
@@ -31,7 +31,7 @@
         <tbody>
             {{ range . }}
             <tr>
-                <td>{{ .Adapter }}</td>
+                <td>{{ .Provider }}</td>
                 <td><input type="text" id="{{ .ID }}_name" name="{{ .ID }}_name" value="{{ .Name }}"></td>
                 <td>{{ .String }}</td>
                 <td>{{ .ContextSize }}</td>
@@ -46,13 +46,13 @@
         </tbody>
     </table>
     {{ else }}
-    <p>No models available.</p>
+    <p>No LLMs available.</p>
     {{ end }}
 
-    <h2>List of available adapters</h2>
+    <h2>List of available providers</h2>
 
-    <div id="adapterList">
-        {{ with .Adapters }}
+    <div id="providerList">
+        {{ with .Providers }}
         <table border="1" cellpadding="5">
             <thead>
                 <tr>
@@ -72,23 +72,23 @@
             </tbody>
         </table>
         {{ else }}
-        <p>No adapters available.</p>
+        <p>No Providers available.</p>
         {{ end }}
     </div>
 
-    <h2>Add new adapter</h2>
+    <h2>Add new provider</h2>
 
-    <form hx-post="/api/admin/adapters" hx-target="#adapterList" hx-swap="innerHTML">
-        <label for="adapterType">Adapter Type:</label>
-        <select id="adapterType" name="adapterType">
+    <form hx-post="/api/admin/providers" hx-target="#providerList" hx-swap="innerHTML">
+        <label for="providerType">Provider Type:</label>
+        <select id="providerType" name="providerType">
             <option value="openai-compatible" selected>OpenAI compatible</option>
             <option value="llama-stack" disabled>Llama Stack</option>
             <select>
 
-                <label for="adapterUrl">Adapter Url:</label>
-                <input type="text" id="adapterUrl" name="adapterUrl" required>
+                <label for="providerUrl">Provider Url:</label>
+                <input type="text" id="providerUrl" name="providerUrl" required>
 
-                <button type="submit">Add Adapter</button>
+                <button type="submit">Add Provider</button>
     </form>
 </body>
 

@@ -61,7 +61,7 @@ func main() {
 	e.GET("/", newChat)
 	e.GET("/admin", admin)
 
-	e.POST("/api/admin/adapters", addAdapter)
+	e.POST("/api/admin/providers", addProvider)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

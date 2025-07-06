@@ -24,18 +24,20 @@ import (
 	"log"
 
 	"gorm.io/gorm"
+
+	"github.com/flokoe/clairvoyance/internal/model"
 )
 
 // MigrateAndSeed performs database migration and initial seeding.
 func MigrateAndSeed(db *gorm.DB) {
-	if err := db.AutoMigrate(&Adapter{}, &Model{}, &User{}, &Conversation{}, &Message{}); err != nil {
+	if err := db.AutoMigrate(&model.Provider{}, &model.Llm{}, &model.User{}, &model.Conversation{}, &model.Message{}); err != nil {
 		log.Fatalf("migration failed: %v", err)
 	}
 
-	if db.Migrator().HasTable(&User{}) {
-		var u User
+	if db.Migrator().HasTable(&model.User{}) {
+		var u model.User
 		if err := db.First(&u).Error; errors.Is(err, gorm.ErrRecordNotFound) {
-			db.Create(&User{Email: "zaphod@pangalactic.gov", Name: "Zaphod Beeblebrox"})
+			db.Create(&model.User{Email: "zaphod@pangalactic.gov", Name: "Zaphod Beeblebrox"})
 		}
 	}
 }
