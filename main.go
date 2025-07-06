@@ -24,6 +24,7 @@ package main
 
 import (
 	"html/template"
+	"io"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -31,6 +32,7 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/flokoe/clairvoyance/internal/database"
+	"github.com/flokoe/clairvoyance/internal/route"
 )
 
 // DBMiddleware make DB available in the context so we can use it in the handlers.
@@ -41,6 +43,15 @@ func DBMiddleware(db *gorm.DB) echo.MiddlewareFunc {
 			return next(c)
 		}
 	}
+}
+
+type templateRegistry struct {
+	templates *template.Template
+}
+
+// Implement the echo.Renderer interface.
+func (t *templateRegistry) Render(w io.Writer, name string, data interface{}, _ echo.Context) error {
+	return t.templates.ExecuteTemplate(w, name, data)
 }
 
 func main() {
@@ -64,10 +75,10 @@ func main() {
 
 	e.Renderer = t
 
-	e.GET("/", newChat)
-	e.GET("/admin", admin)
+	e.GET("/", route.NewChatView)
+	e.GET("/admin", route.AdminView)
 
-	e.POST("/api/admin/providers", addProvider)
+	e.POST("/api/admin/providers", route.ApiAdminAddProvider)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

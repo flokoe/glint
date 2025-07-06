@@ -18,33 +18,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 SPDX-License-Identifier: AGPL-3.0-only
 */
 
-package main
+package route
 
 import (
-	"html/template"
-	"io"
 	"net/http"
 
+	"github.com/flokoe/clairvoyance/internal/model"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
-
-	"github.com/flokoe/clairvoyance/internal/model"
 )
 
-type templateRegistry struct {
-	templates *template.Template
-}
-
-// Implement the echo.Renderer interface.
-func (t *templateRegistry) Render(w io.Writer, name string, data interface{}, _ echo.Context) error {
-	return t.templates.ExecuteTemplate(w, name, data)
-}
-
-func newChat(c echo.Context) error {
-	return c.Render(http.StatusOK, "chat.html", "Sun")
-}
-
-func admin(c echo.Context) error {
+func AdminView(c echo.Context) error {
 	db := c.Get("db").(*gorm.DB)
 
 	type AdminData struct {
@@ -67,7 +51,7 @@ type providerDTO struct {
 	URL  string `form:"providerUrl"`
 }
 
-func addProvider(c echo.Context) error {
+func ApiAdminAddProvider(c echo.Context) error {
 	db := c.Get("db").(*gorm.DB)
 
 	a := new(providerDTO)
