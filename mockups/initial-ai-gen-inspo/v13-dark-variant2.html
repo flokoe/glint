@@ -1,3 +1,23 @@
+<!--
+Clairvoyance - A feature-rich web based AI chat UI
+Copyright (C) 2025 Florian Köhler
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+SPDX-License-Identifier: AGPL-3.0-only
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -97,7 +117,7 @@
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid var(--glass-border);
-            box-shadow: 
+            box-shadow:
                 inset 0 1px 2px rgba(255, 255, 255, 0.3),
                 0 20px 40px var(--shadow-soft),
                 0 0 80px var(--shadow-soft);
@@ -1075,25 +1095,25 @@
                     <div class="message-avatar glass">AI</div>
                     <div class="message-content glass">
                         <p>I'd be happy to help you create a modern React dashboard component with animated charts! Here's a comprehensive solution using popular libraries:</p>
-                        
+
                         <div class="code-block glass">
                             <div class="code-header">
                                 <span class="code-language">jsx</span>
                                 <button class="copy-btn">📋 Copy</button>
                             </div>
                             <pre><code>import React, { useState, useEffect } from 'react';
-import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, 
-         XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
+import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
+         XAxis, YAxis, CartesianGrid, Tooltip, Legend,
          ResponsiveContainer } from 'recharts';
 import { motion } from 'framer-motion';
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
-  
+
   // Component code here...
 }</code></pre>
                         </div>
-                        
+
                         <p>This dashboard includes:</p>
                         <ul class="feature-list">
                             <li>📊 Multiple chart types (Line, Bar, Pie)</li>
@@ -1101,7 +1121,7 @@ const Dashboard = () => {
                             <li>📱 Fully responsive design</li>
                             <li>🎨 Customizable color schemes</li>
                         </ul>
-                        
+
                         <div class="action-pills">
                             <button class="pill-btn glass">👍 Helpful</button>
                             <button class="pill-btn glass">💭 Explain more</button>
@@ -1146,7 +1166,7 @@ const Dashboard = () => {
                                 </div>
                                 <span style="margin-left: 20px;">▼</span>
                             </div>
-                            
+
                             <button class="advanced-toggle">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="9 18 15 12 9 6"></polyline>
@@ -1154,7 +1174,7 @@ const Dashboard = () => {
                                 <span>Expert Mode</span>
                             </button>
                         </div>
-                        
+
                         <div class="controls-right">
                             <button class="control-btn glass">💾</button>
                             <button class="control-btn glass">📤</button>
