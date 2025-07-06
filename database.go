@@ -16,38 +16,33 @@
 // <https://www.gnu.org/licenses/>.
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
+
 package main
 
 import (
-	"html/template"
+	"errors"
+	"log"
 
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
-func main() {
-	e := echo.New()
-
-	db, err := gorm.Open(sqlite.Open("clairvoyance.db"), &gorm.Config{})
-	if err != nil {
-		e.Logger.Fatal("Failed to connect to database:", err)
-	}
-	MigrateAndSeed(db)
-
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
-
-	e.Static("/", "public")
-
-	t := &templateRegistry{
-		templates: template.Must(template.ParseGlob("templates/*.html")),
+// MigrateAndSeed performs database migration and initial seeding.
+func MigrateAndSeed(db *gorm.DB) {
+	if err := db.AutoMigrate(&Model{}, &User{}, &Conversation{}, &Message{}); err != nil {
+		log.Fatalf("migration failed: %v", err)
 	}
 
-	e.Renderer = t
+	if db.Migrator().HasTable(&Model{}) {
+		var m Model
+		if err := db.First(&m).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+			db.Create(&Model{String: "granite3", Name: "Granite 3.3 8B"})
+		}
+	}
 
-	e.GET("/", newChat)
-
-	e.Logger.Fatal(e.Start(":1323"))
+	if db.Migrator().HasTable(&User{}) {
+		var u User
+		if err := db.First(&u).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+			db.Create(&User{Email: "zaphod@pangalactic.gov", Name: "Zaphod Beeblebrox"})
+		}
+	}
 }
