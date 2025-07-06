@@ -1,0 +1,20 @@
+<table border="1" cellpadding="5">
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>URL</th>
+            <th>Created At</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{ range . }}
+        <tr>
+            <td>{{ .Type }}</td>
+            <td>{{ .URL }}</td>
+            <td>{{ .CreatedAt }}</td>
+        </tr>
+        {{ else }}
+        {{ . }}
+        {{ end }}
+    </tbody>
+</table>

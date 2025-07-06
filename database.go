@@ -28,15 +28,8 @@ import (
 
 // MigrateAndSeed performs database migration and initial seeding.
 func MigrateAndSeed(db *gorm.DB) {
-	if err := db.AutoMigrate(&Model{}, &User{}, &Conversation{}, &Message{}); err != nil {
+	if err := db.AutoMigrate(&Adapter{}, &Model{}, &User{}, &Conversation{}, &Message{}); err != nil {
 		log.Fatalf("migration failed: %v", err)
-	}
-
-	if db.Migrator().HasTable(&Model{}) {
-		var m Model
-		if err := db.First(&m).Error; errors.Is(err, gorm.ErrRecordNotFound) {
-			db.Create(&Model{String: "granite3", Name: "Granite 3.3 8B"})
-		}
 	}
 
 	if db.Migrator().HasTable(&User{}) {

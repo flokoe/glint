@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Clairvoyance</title>
+
+    <script src="htmx-2.0.6.js" integrity="sha256-tnaO7U86+Ftzp1BUcBvWDhfKxxiu8rf2slTl4OIEVhY="></script>
+</head>
+
+<body>
+    <h1>Admin Dashboard</h1>
+
+    <h2>List of available models</h2>
+
+    {{ with .Models }}
+    <table border="1" cellpadding="5">
+        <thead>
+            <tr>
+                <th>Adapter</th>
+                <th>Name</th>
+                <th>String</th>
+                <th>Context Size</th>
+                <th>Capabilities</th>
+                <th>Created At</th>
+                <th>Updated At</th>
+                <th>Enabled</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ range . }}
+            <tr>
+                <td>{{ .Adapter }}</td>
+                <td><input type="text" id="{{ .ID }}_name" name="{{ .ID }}_name" value="{{ .Name }}"></td>
+                <td>{{ .String }}</td>
+                <td>{{ .ContextSize }}</td>
+                <td>{{ .Capabilities }}</td>
+                <td>{{ .CreatedAt }}</td>
+                <td>{{ .UpdatedAt }}</td>
+                <td>
+                    <input type="checkbox" name="{{ .ID }}_enabled" {{ if .IsEnabled }}checked{{ end }}>
+                </td>
+            </tr>
+            {{ end }}
+        </tbody>
+    </table>
+    {{ else }}
+    <p>No models available.</p>
+    {{ end }}
+
+    <h2>List of available adapters</h2>
+
+    <div id="adapterList">
+        {{ with .Adapters }}
+        <table border="1" cellpadding="5">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>URL</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ range . }}
+                <tr>
+                    <td>{{ .Type }}</td>
+                    <td>{{ .URL }}</td>
+                    <td>{{ .CreatedAt }}</td>
+                </tr>
+                {{ end }}
+            </tbody>
+        </table>
+        {{ else }}
+        <p>No adapters available.</p>
+        {{ end }}
+    </div>
+
+    <h2>Add new adapter</h2>
+
+    <form hx-post="/api/admin/adapters" hx-target="#adapterList" hx-swap="innerHTML">
+        <label for="adapterType">Adapter Type:</label>
+        <select id="adapterType" name="adapterType">
+            <option value="openai-compatible" selected>OpenAI compatible</option>
+            <option value="llama-stack" disabled>Llama Stack</option>
+            <select>
+
+                <label for="adapterUrl">Adapter Url:</label>
+                <input type="text" id="adapterUrl" name="adapterUrl" required>
+
+                <button type="submit">Add Adapter</button>
+    </form>
+</body>
+
+</html>

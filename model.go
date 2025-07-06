@@ -19,11 +19,29 @@
 
 package main
 
+// Adapter represents an AI API Provider/Endpoint.
+type Adapter struct {
+	ID        uint
+	Type      string `gorm:"not null"` // e.g. "openai-compatible", "llama-stack"
+	URL       string `gorm:"not null"` // Base URL for the adapter, e.g. "https://api.openai.com/v1"
+	CreatedAt int64
+
+	Models []Model
+}
+
 // Model represents a Large Language Model.
 type Model struct {
-	ID     uint
-	String string `gorm:"not null"`
-	Name   string `gorm:"not null"`
+	ID           uint
+	String       string `gorm:"not null"` // Model identifier within the adapter
+	Name         string `gorm:"not null"`
+	AdapterID    uint   `gorm:"not null"`
+	ContextSize  int    `gorm:"not null"`
+	Capabilities string `gorm:"not null"` // e.g. "chat", "completion", "embedding"
+	IsEnabled    bool   `gorm:"not null;default:true"`
+	CreatedAt    int64
+	UpdatedAt    int64
+
+	Adapter Adapter
 }
 
 // User represents a user in the system.

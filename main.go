@@ -27,6 +27,16 @@ import (
 	"gorm.io/gorm"
 )
 
+// DBMiddleware make DB available in the context so we can use it in the handlers.
+func DBMiddleware(db *gorm.DB) echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			c.Set("db", db)
+			return next(c)
+		}
+	}
+}
+
 func main() {
 	e := echo.New()
 
@@ -38,6 +48,7 @@ func main() {
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
+	e.Use(DBMiddleware(db))
 
 	e.Static("/", "public")
 
@@ -48,6 +59,9 @@ func main() {
 	e.Renderer = t
 
 	e.GET("/", newChat)
+	e.GET("/admin", admin)
+
+	e.POST("/api/admin/adapters", addAdapter)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

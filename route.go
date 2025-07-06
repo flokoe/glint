@@ -24,6 +24,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
 type templateRegistry struct {
@@ -37,4 +38,54 @@ func (t *templateRegistry) Render(w io.Writer, name string, data interface{}, _ 
 
 func newChat(c echo.Context) error {
 	return c.Render(http.StatusOK, "chat.html", "Sun")
+}
+
+func admin(c echo.Context) error {
+	db := c.Get("db").(*gorm.DB)
+
+	type AdminData struct {
+		Adapters []Adapter
+		Models   []Model
+	}
+
+	var data AdminData
+
+	// Fetch the newly created adapter with its models
+	if err := db.Find(&data.Adapters).Error; err != nil {
+		return c.String(http.StatusInternalServerError, "failed to fetch adapter")
+	}
+
+	return c.Render(http.StatusOK, "admin.html", data)
+}
+
+type adapterDTO struct {
+	Type string `form:"adapterType"`
+	URL  string `form:"adapterUrl"`
+}
+
+func addAdapter(c echo.Context) error {
+	db := c.Get("db").(*gorm.DB)
+
+	a := new(adapterDTO)
+	if err := c.Bind(a); err != nil {
+		return c.String(http.StatusBadRequest, "bad request")
+	}
+
+	// Load into separate struct for security
+	adapter := Adapter{
+		Type: a.Type,
+		URL:  a.URL,
+	}
+
+	if err := db.Create(&adapter).Error; err != nil {
+		return c.String(http.StatusInternalServerError, "failed to create adapter")
+	}
+
+	// Fetch the newly created adapter with its models
+	var adapters []Adapter
+	if err := db.Find(&adapters).Error; err != nil {
+		return c.String(http.StatusInternalServerError, "failed to fetch adapter")
+	}
+
+	return c.Render(http.StatusOK, "adapterTable.html", adapters)
 }
