@@ -67,7 +67,7 @@ func main() {
 	e.Use(middleware.Recover())
 	e.Use(DBMiddleware(db))
 
-	e.Static("/", "public")
+	e.Static("/", "static")
 
 	t := &templateRegistry{
 		templates: template.Must(template.ParseGlob("templates/*.html")),
