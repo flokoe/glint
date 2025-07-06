@@ -18,6 +18,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 SPDX-License-Identifier: AGPL-3.0-only
 */
 
+// Clairvoyance is a feature-rich web based AI chat UI.
+// It provides a user-friendly interface for interacting with AI models.
 package main
 
 import (
@@ -27,6 +29,8 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+
+	"github.com/flokoe/clairvoyance/internal/database"
 )
 
 // DBMiddleware make DB available in the context so we can use it in the handlers.
@@ -46,7 +50,7 @@ func main() {
 	if err != nil {
 		e.Logger.Fatal("Failed to connect to database:", err)
 	}
-	MigrateAndSeed(db)
+	database.MigrateAndSeed(db)
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())

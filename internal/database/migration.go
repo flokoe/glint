@@ -18,8 +18,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 SPDX-License-Identifier: AGPL-3.0-only
 */
 
-// Database migration and seeding logic
-package main
+// Package database provides migration and seeding logic
+package database
 
 import (
 	"errors"
