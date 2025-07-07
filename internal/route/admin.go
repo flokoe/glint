@@ -21,15 +21,28 @@ SPDX-License-Identifier: AGPL-3.0-only
 package route
 
 import (
+	"fmt"
 	"net/http"
 
-	"github.com/flokoe/clairvoyance/internal/model"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
+
+	"github.com/flokoe/clairvoyance/internal/llm"
+	"github.com/flokoe/clairvoyance/internal/model"
 )
 
 func AdminView(c echo.Context) error {
 	db := c.Get("db").(*gorm.DB)
+
+	llamaProvider := llm.NewOpenAICompatibleClient("http://127.0.0.1:8080", "")
+
+	// Use the same interface regardless of provider
+	models, _ := llamaProvider.GetModels()
+	if models != nil {
+		for _, model := range *models {
+			fmt.Printf("Model: %s, Context Size: %d\n", model.String, model.ContextSize)
+		}
+	}
 
 	type AdminData struct {
 		Providers []model.Provider
