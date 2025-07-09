@@ -18,19 +18,24 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 SPDX-License-Identifier: AGPL-3.0-only
 */
 
-package model
+package llm
 
-// Llm represents a Large Language Model.
-type Llm struct {
-	ID           uint
-	String       string `gorm:"not null"` // Model identifier within the provider
-	Name         string `gorm:"not null"`
-	ProviderID   uint   `gorm:"not null"`
-	ContextSize  int    `gorm:"not null"`
-	Capabilities string // e.g. "chat", "completion", "embedding"
-	IsEnabled    bool   `gorm:"not null;default:true"`
-	CreatedAt    int64
-	UpdatedAt    int64
+import (
+	"fmt"
+)
 
-	Provider Provider
+// Helper function to create providers based on configuration
+func NewProvider(providerType string, config map[string]string) (LLMProvider, error) {
+	switch providerType {
+	case "openai-compatible":
+		return NewOpenAICompatibleClient(config["base_url"], config["api_key"]), nil
+	// case "custom":
+	// 	return &CustomLLMProvider{
+	// 		Endpoint: config["endpoint"],
+	// 		Token:    config["token"],
+	// 		Client:   &http.Client{Timeout: 30 * time.Second},
+	// 	}, nil
+	default:
+		return nil, fmt.Errorf("unknown provider type: %s", providerType)
+	}
 }

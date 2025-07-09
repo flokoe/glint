@@ -21,11 +21,14 @@ SPDX-License-Identifier: AGPL-3.0-only
 package route
 
 import (
+	"fmt"
 	"net/http"
 
-	"github.com/flokoe/clairvoyance/internal/model"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
+
+	"github.com/flokoe/clairvoyance/internal/llm"
+	"github.com/flokoe/clairvoyance/internal/model"
 )
 
 func AdminView(c echo.Context) error {
@@ -40,6 +43,10 @@ func AdminView(c echo.Context) error {
 
 	// Fetch the newly created provider with its models
 	if err := db.Find(&data.Providers).Error; err != nil {
+		return c.String(http.StatusInternalServerError, "failed to fetch provider")
+	}
+
+	if err := db.Find(&data.LLMs).Error; err != nil {
 		return c.String(http.StatusInternalServerError, "failed to fetch provider")
 	}
 
@@ -73,6 +80,36 @@ func ApiAdminAddProvider(c echo.Context) error {
 	var providers []model.Provider
 	if err := db.Find(&providers).Error; err != nil {
 		return c.String(http.StatusInternalServerError, "failed to fetch provider")
+	}
+
+	foo, err := llm.NewProvider(provider.Type, map[string]string{
+		"base_url": provider.URL,
+	})
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "failed to create LLM provider")
+	}
+
+	m, err := foo.GetModels()
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "failed to fetch models")
+	}
+
+	fmt.Println(provider.ID)
+
+	var M []model.Llm
+	for _, mdl := range *m {
+		M = append(M, model.Llm{
+			String:      mdl.String,
+			Name:        mdl.String,
+			ProviderID:  provider.ID,
+			ContextSize: mdl.ContextSize,
+			IsEnabled:   true,
+		})
+	}
+
+	// Also save to database
+	if err := db.Create(&M).Error; err != nil {
+		return c.String(http.StatusInternalServerError, "failed to create model")
 	}
 
 	return c.Render(http.StatusOK, "providerTable.html", providers)
