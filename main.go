@@ -23,27 +23,18 @@ SPDX-License-Identifier: AGPL-3.0-only
 package main
 
 import (
+	"database/sql"
+	_ "embed"
 	"html/template"
 	"io"
+	"log"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
+	_ "modernc.org/sqlite"
 
-	"github.com/flokoe/clairvoyance/internal/database"
-	"github.com/flokoe/clairvoyance/internal/route"
+	"github.com/flokoe/clairvoyance/internal/handler"
 )
-
-// DBMiddleware make DB available in the context so we can use it in the handlers.
-func DBMiddleware(db *gorm.DB) echo.MiddlewareFunc {
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			c.Set("db", db)
-			return next(c)
-		}
-	}
-}
 
 type templateRegistry struct {
 	templates *template.Template
@@ -54,19 +45,22 @@ func (t *templateRegistry) Render(w io.Writer, name string, data interface{}, _ 
 	return t.templates.ExecuteTemplate(w, name, data)
 }
 
+//go:embed schema.sql
+var ddl string
+
 func main() {
-	e := echo.New()
-
-	db, err := gorm.Open(sqlite.Open("clairvoyance.db"), &gorm.Config{})
+	db, err := sql.Open("sqlite", "clairvoyance.db")
 	if err != nil {
-		e.Logger.Fatal("Failed to connect to database:", err)
+		log.Fatal("Failed to connect to database:", err)
 	}
-	database.MigrateAndSeed(db)
+	defer db.Close()
 
+	chatHandler := handler.NewChatHandler(db)
+	adminHandler := handler.NewAdminHandler(db)
+
+	e := echo.New()
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
-	e.Use(DBMiddleware(db))
-
 	e.Static("/", "static")
 
 	t := &templateRegistry{
@@ -75,10 +69,10 @@ func main() {
 
 	e.Renderer = t
 
-	e.GET("/", route.NewChatView)
-	e.GET("/admin", route.AdminView)
+	e.GET("/", chatHandler.ChatView)
+	e.GET("/admin", adminHandler.AdminView)
 
-	e.POST("/api/admin/providers", route.ApiAdminAddProvider)
+	e.POST("/api/admin/providers", adminHandler.ApiAddProvider)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

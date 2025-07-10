@@ -18,36 +18,47 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 SPDX-License-Identifier: AGPL-3.0-only
 */
 
-package route
+package handler
 
 import (
-	"fmt"
+	"database/sql"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"gorm.io/gorm"
 
+	"github.com/flokoe/clairvoyance/internal/database"
 	"github.com/flokoe/clairvoyance/internal/llm"
-	"github.com/flokoe/clairvoyance/internal/model"
 )
 
-func AdminView(c echo.Context) error {
-	db := c.Get("db").(*gorm.DB)
+type AdminHandler struct {
+	queries *database.Queries
+}
 
-	type AdminData struct {
-		Providers []model.Provider
-		LLMs      []model.Llm
+func NewAdminHandler(db *sql.DB) *ChatHandler {
+	return &ChatHandler{
+		queries: database.New(db),
+	}
+}
+
+type AdminViewData struct {
+	Providers []database.Providers
+	LLMs      []database.Llms
+}
+
+func (h *ChatHandler) AdminView(c echo.Context) error {
+	providers, err := h.queries.GetProviders(c.Request().Context())
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Failed to fetch providers")
 	}
 
-	var data AdminData
-
-	// Fetch the newly created provider with its models
-	if err := db.Find(&data.Providers).Error; err != nil {
-		return c.String(http.StatusInternalServerError, "failed to fetch provider")
+	LLMs, err := h.queries.GetLLMs(c.Request().Context())
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Failed to fetch LLMs")
 	}
 
-	if err := db.Find(&data.LLMs).Error; err != nil {
-		return c.String(http.StatusInternalServerError, "failed to fetch provider")
+	data := AdminViewData{
+		providers,
+		LLMs,
 	}
 
 	return c.Render(http.StatusOK, "admin.html", data)
@@ -58,32 +69,31 @@ type providerDTO struct {
 	URL  string `form:"providerUrl"`
 }
 
-func ApiAdminAddProvider(c echo.Context) error {
-	db := c.Get("db").(*gorm.DB)
-
+func (h *ChatHandler) ApiAddProvider(c echo.Context) error {
 	a := new(providerDTO)
 	if err := c.Bind(a); err != nil {
 		return c.String(http.StatusBadRequest, "bad request")
 	}
 
 	// Load into separate struct for security
-	provider := model.Provider{
+	provider := database.AddProviderParams{
 		Type: a.Type,
-		URL:  a.URL,
+		Url:  a.URL,
 	}
 
-	if err := db.Create(&provider).Error; err != nil {
-		return c.String(http.StatusInternalServerError, "failed to create provider")
+	providerResult, err := h.queries.AddProvider(c.Request().Context(), provider)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Failed to add providers")
 	}
 
 	// Fetch the newly created provider with its models
-	var providers []model.Provider
-	if err := db.Find(&providers).Error; err != nil {
+	providers, err := h.queries.GetProviders(c.Request().Context())
+	if err != nil {
 		return c.String(http.StatusInternalServerError, "failed to fetch provider")
 	}
 
 	foo, err := llm.NewProvider(provider.Type, map[string]string{
-		"base_url": provider.URL,
+		"base_url": provider.Url,
 	})
 	if err != nil {
 		return c.String(http.StatusInternalServerError, "failed to create LLM provider")
@@ -94,22 +104,19 @@ func ApiAdminAddProvider(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, "failed to fetch models")
 	}
 
-	fmt.Println(provider.ID)
-
-	var M []model.Llm
 	for _, mdl := range *m {
-		M = append(M, model.Llm{
+		llm := database.AddLLMParams{
 			String:      mdl.String,
 			Name:        mdl.String,
-			ProviderID:  provider.ID,
+			ProviderID:  providerResult.ID,
 			ContextSize: mdl.ContextSize,
-			IsEnabled:   true,
-		})
-	}
+		}
 
-	// Also save to database
-	if err := db.Create(&M).Error; err != nil {
-		return c.String(http.StatusInternalServerError, "failed to create model")
+		// Also save to database
+		_, err := h.queries.AddLLM(c.Request().Context(), llm)
+		if err != nil {
+			return c.String(http.StatusInternalServerError, "Failed to add providers")
+		}
 	}
 
 	return c.Render(http.StatusOK, "providerTable.html", providers)

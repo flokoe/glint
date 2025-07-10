@@ -111,7 +111,7 @@ func (c *OpenAICompatibleClient) GetModels() (*ModelsResponse, error) {
 	for _, value := range m.Data {
 		models = append(models, Model{
 			String:      value.ID,
-			ContextSize: value.Meta.NContextTrain,
+			ContextSize: int64(value.Meta.NContextTrain),
 		})
 	}
 

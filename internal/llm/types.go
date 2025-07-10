@@ -55,7 +55,7 @@ package llm
 
 type Model struct {
 	String      string `json:"id"`
-	ContextSize int    `json:"context_size"`
+	ContextSize int64  `json:"context_size"`
 }
 
 type ModelsResponse []Model

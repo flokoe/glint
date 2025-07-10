@@ -51,7 +51,7 @@ SPDX-License-Identifier: AGPL-3.0-only
         <tbody>
             {{ range . }}
             <tr>
-                <td>{{ .Provider }}</td>
+                <td>{{ .ProviderID }}</td>
                 <td><input type="text" id="{{ .ID }}_name" name="{{ .ID }}_name" value="{{ .Name }}"></td>
                 <td>{{ .String }}</td>
                 <td>{{ .ContextSize }}</td>
@@ -85,7 +85,7 @@ SPDX-License-Identifier: AGPL-3.0-only
                 {{ range . }}
                 <tr>
                     <td>{{ .Type }}</td>
-                    <td>{{ .URL }}</td>
+                    <td>{{ .Url }}</td>
                     <td>{{ .CreatedAt }}</td>
                 </tr>
                 {{ end }}

@@ -243,6 +243,54 @@
           "store_path": "/nix/store/f8bm1qmj7zqlvnk1952ybv3aai0mfwyq-lefthook-1.11.14"
         }
       }
+    },
+    "sqlc@latest": {
+      "last_modified": "2025-06-20T02:24:11Z",
+      "resolved": "github:NixOS/nixpkgs/076e8c6678d8c54204abcb4b1b14c366835a58bb#sqlc",
+      "source": "devbox-search",
+      "version": "1.29.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/b64c7hc74s4y69nw7m2nm0lw6v4017qc-sqlc-1.29.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/b64c7hc74s4y69nw7m2nm0lw6v4017qc-sqlc-1.29.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/hzcgqj9da29pz7xs0v7ls3rfmyj7yamh-sqlc-1.29.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/hzcgqj9da29pz7xs0v7ls3rfmyj7yamh-sqlc-1.29.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/q1d4hlqvs0yp0dgbsripljvi5wpl06qn-sqlc-1.29.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/q1d4hlqvs0yp0dgbsripljvi5wpl06qn-sqlc-1.29.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/hqnlyn149iby5jw95hsab9f2w7rqi2ny-sqlc-1.29.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/hqnlyn149iby5jw95hsab9f2w7rqi2ny-sqlc-1.29.0"
+        }
+      }
     }
   }
 }
