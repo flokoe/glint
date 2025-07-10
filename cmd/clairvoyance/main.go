@@ -45,7 +45,6 @@ func (t *templateRegistry) Render(w io.Writer, name string, data interface{}, _ 
 	return t.templates.ExecuteTemplate(w, name, data)
 }
 
-//go:embed schema.sql
 var ddl string
 
 func main() {
