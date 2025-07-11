@@ -1,4 +1,5 @@
 [build]
+  cmd = "go build -o ./tmp/main cmd/clairvoyance/main.go"
   exclude_dir = ["mockups"]
 
 [proxy]
