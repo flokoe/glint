@@ -578,6 +578,9 @@ main {
     color: var(--text-primary);
     width: 100%;
     margin-bottom: 1rem;
+    resize: none;
+    overflow: auto;
+    max-height: 25rem;
 }
 
 .textarea-container textarea::placeholder {
