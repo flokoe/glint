@@ -50,7 +50,7 @@ type Provider struct {
 
 type User struct {
 	ID        int64
-	Name      string
 	Email     string
-	CreatedAt sql.NullInt64
+	Name      sql.NullString
+	CreatedAt int64
 }

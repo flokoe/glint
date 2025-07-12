@@ -21,9 +21,11 @@ CREATE TABLE llms (
 
 CREATE TABLE users (
     id         integer PRIMARY KEY AUTOINCREMENT,
-    name       text    NOT NULL,
     email      text    NOT NULL,
-    created_at integer
+    name       text,
+    created_at integer NOT NULL DEFAULT (unixepoch('now')),
+
+    CONSTRAINT uni_users_email UNIQUE (email)
 );
 
 CREATE TABLE conversations (
