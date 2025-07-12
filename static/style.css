@@ -262,6 +262,7 @@ button:hover .shortcut-popup {
     gap: 1rem;
     padding: 1rem 1.2rem 1.2rem 1.2rem;
     overflow-y: auto;
+    height: 100%;
 
     mask-image: linear-gradient(to bottom,
             transparent 0%,
@@ -367,6 +368,11 @@ button:hover .shortcut-popup {
     cursor: initial;
     box-shadow: 0 0.5rem 2rem var(--shadow-medium);
     min-width: 8rem;
+}
+
+.item-popup-menu-offscreen {
+    top: unset;
+    bottom: calc(100% - .2rem);
 }
 
 .item-popup-menu button {

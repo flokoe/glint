@@ -273,7 +273,7 @@ SPDX-License-Identifier: AGPL-3.0-only
                         <span>Recent</span>
                     </div>
 
-                    <div class="chat-item active" x-data="{ menuOpen: false }"
+                    <div class="chat-item active" x-data="{ menuOpen: false, menuOffscreen: false }"
                         title="Designing a modern interface lorem ipsum huhu&#10;Erstellt am: 03.07.2025">
                         <span>Designing a modern interface lorem ipsum
                             huhu</span>
@@ -289,7 +289,10 @@ SPDX-License-Identifier: AGPL-3.0-only
                             </svg>
                         </button>
 
-                        <div class="item-popup-menu" x-cloak x-show="menuOpen" @click.outside="menuOpen = false">
+                        <div class="item-popup-menu" x-cloak x-show="menuOpen" @click.outside="menuOpen = false"
+                            x-intersect:enter="menuOffscreen = true"
+                            x-intersect:leave="menuOffscreen = false"
+                            x-transition :class="menuOffscreen && 'item-popup-menu-offscreen'">
                             <button>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                     <path fill="none" stroke="currentColor" stroke-linecap="round"
