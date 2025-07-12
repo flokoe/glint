@@ -156,14 +156,13 @@ button:hover .shortcut-popup {
     border-radius: 0.5rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    border: 1px solid transparent;
+    border: 0;
     background: transparent;
     color: var(--text-secondary);
 }
 
 .sidebar-collapsed button:hover {
     background: var(--glass-light);
-    border-color: var(--glass-border);
 }
 
 .sidebar {
@@ -200,14 +199,13 @@ button:hover .shortcut-popup {
     border-radius: 0.5rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    border: 1px solid transparent;
+    border: 0;
     background: transparent;
     color: var(--text-secondary);
 }
 
 .sidebar-close-btn:hover {
     background: var(--glass-light);
-    border-color: var(--glass-border);
 }
 
 .new-chat-btn {
