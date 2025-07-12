@@ -7,7 +7,31 @@ package database
 
 import (
 	"context"
+	"database/sql"
 )
+
+const addConversation = `-- name: AddConversation :one
+INSERT INTO conversations (user_id, uuid) VALUES (?, ?) RETURNING id, user_id, uuid, title, created_at, updated_at
+`
+
+type AddConversationParams struct {
+	UserID int64
+	Uuid   string
+}
+
+func (q *Queries) AddConversation(ctx context.Context, arg AddConversationParams) (Conversation, error) {
+	row := q.db.QueryRowContext(ctx, addConversation, arg.UserID, arg.Uuid)
+	var i Conversation
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Uuid,
+		&i.Title,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
 
 const addLLM = `-- name: AddLLM :one
 INSERT INTO llms (string, name, provider_id, context_size) VALUES (?, ?, ?, ?) RETURNING id, string, name, provider_id, context_size, capabilities, is_enabled, created_at, updated_at
@@ -61,6 +85,76 @@ func (q *Queries) AddProvider(ctx context.Context, arg AddProviderParams) (Provi
 		&i.CreatedAt,
 	)
 	return i, err
+}
+
+const getConversationByID = `-- name: GetConversationByID :one
+SELECT id, user_id, uuid, title, created_at, updated_at FROM conversations WHERE id = ? LIMIT 1
+`
+
+func (q *Queries) GetConversationByID(ctx context.Context, id int64) (Conversation, error) {
+	row := q.db.QueryRowContext(ctx, getConversationByID, id)
+	var i Conversation
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Uuid,
+		&i.Title,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const getConversationByUUID = `-- name: GetConversationByUUID :one
+SELECT id, user_id, uuid, title, created_at, updated_at FROM conversations WHERE uuid = ? LIMIT 1
+`
+
+func (q *Queries) GetConversationByUUID(ctx context.Context, uuid string) (Conversation, error) {
+	row := q.db.QueryRowContext(ctx, getConversationByUUID, uuid)
+	var i Conversation
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Uuid,
+		&i.Title,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const getConversationsByUserID = `-- name: GetConversationsByUserID :many
+SELECT id, user_id, uuid, title, created_at, updated_at FROM conversations WHERE user_id = ? ORDER BY created_at
+`
+
+func (q *Queries) GetConversationsByUserID(ctx context.Context, userID int64) ([]Conversation, error) {
+	rows, err := q.db.QueryContext(ctx, getConversationsByUserID, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Conversation
+	for rows.Next() {
+		var i Conversation
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Uuid,
+			&i.Title,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getLLMs = `-- name: GetLLMs :many
@@ -162,4 +256,18 @@ func (q *Queries) GetUserByID(ctx context.Context, id int64) (User, error) {
 		&i.CreatedAt,
 	)
 	return i, err
+}
+
+const updateConversationTitle = `-- name: UpdateConversationTitle :exec
+UPDATE conversations set title = ?, updated_at = unixepoch('now') WHERE uuid = ?
+`
+
+type UpdateConversationTitleParams struct {
+	Title sql.NullString
+	Uuid  string
+}
+
+func (q *Queries) UpdateConversationTitle(ctx context.Context, arg UpdateConversationTitleParams) error {
+	_, err := q.db.ExecContext(ctx, updateConversationTitle, arg.Title, arg.Uuid)
+	return err
 }

@@ -10,11 +10,11 @@ import (
 
 type Conversation struct {
 	ID        int64
-	UserID    sql.NullInt64
+	UserID    int64
 	Uuid      string
 	Title     sql.NullString
-	CreatedAt sql.NullInt64
-	UpdatedAt sql.NullInt64
+	CreatedAt int64
+	UpdatedAt int64
 }
 
 type Llm struct {

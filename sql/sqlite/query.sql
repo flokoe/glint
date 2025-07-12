@@ -15,3 +15,18 @@ SELECT * FROM users WHERE id = ? LIMIT 1;
 
 -- name: GetUserByEmail :one
 SELECT * FROM users WHERE email = ? LIMIT 1;
+
+-- name: GetConversationByID :one
+SELECT * FROM conversations WHERE id = ? LIMIT 1;
+
+-- name: GetConversationByUUID :one
+SELECT * FROM conversations WHERE uuid = ? LIMIT 1;
+
+-- name: GetConversationsByUserID :many
+SELECT * FROM conversations WHERE user_id = ? ORDER BY created_at;
+
+-- name: AddConversation :one
+INSERT INTO conversations (user_id, uuid) VALUES (?, ?) RETURNING *;
+
+-- name: UpdateConversationTitle :exec
+UPDATE conversations set title = ?, updated_at = unixepoch('now') WHERE uuid = ?;

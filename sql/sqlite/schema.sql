@@ -30,11 +30,11 @@ CREATE TABLE users (
 
 CREATE TABLE conversations (
     id         integer PRIMARY KEY AUTOINCREMENT,
-    user_id    integer,
+    user_id    integer NOT NULL,
     uuid       text    NOT NULL,
-    title      text,
-    created_at integer,
-    updated_at integer,
+    title      text    DEFAULT 'New chat',
+    created_at integer NOT NULL DEFAULT (unixepoch('now')),
+    updated_at integer NOT NULL DEFAULT (unixepoch('now')),
 
     CONSTRAINT fk_users_conversations FOREIGN KEY (user_id) REFERENCES users (id),
     CONSTRAINT uni_conversations_uuid UNIQUE (uuid)
