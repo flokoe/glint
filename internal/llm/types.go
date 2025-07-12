@@ -20,38 +20,38 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 package llm
 
-// // Common types for LLM interactions
-// type Message struct {
-// 	Role    string `json:"role"`
-// 	Content string `json:"content"`
-// }
+// Common types for LLM interactions
+type Message struct {
+	Role    string `json:"role"`
+	Content string `json:"content"`
+}
 
-// type CompletionRequest struct {
-// 	Model       string    `json:"model"`
-// 	Messages    []Message `json:"messages,omitempty"`
-// 	Prompt      string    `json:"prompt,omitempty"`
-// 	MaxTokens   int       `json:"max_tokens,omitempty"`
-// 	Temperature float64   `json:"temperature,omitempty"`
-// 	Stream      bool      `json:"stream,omitempty"`
-// }
+type CompletionRequest struct {
+	Model       string    `json:"model"`
+	Messages    []Message `json:"messages,omitempty"`
+	Prompt      string    `json:"prompt,omitempty"`
+	MaxTokens   int       `json:"max_tokens,omitempty"`
+	Temperature float64   `json:"temperature,omitempty"`
+	Stream      bool      `json:"stream,omitempty"`
+}
 
-// type CompletionResponse struct {
-// 	ID      string `json:"id"`
-// 	Object  string `json:"object"`
-// 	Created int64  `json:"created"`
-// 	Model   string `json:"model"`
-// 	Choices []struct {
-// 		Index   int     `json:"index"`
-// 		Message Message `json:"message,omitempty"`
-// 		Text    string  `json:"text,omitempty"`
-// 		Finish  string  `json:"finish_reason"`
-// 	} `json:"choices"`
-// 	Usage struct {
-// 		PromptTokens     int `json:"prompt_tokens"`
-// 		CompletionTokens int `json:"completion_tokens"`
-// 		TotalTokens      int `json:"total_tokens"`
-// 	} `json:"usage"`
-// }
+type CompletionResponse struct {
+	ID      string `json:"id"`
+	Object  string `json:"object"`
+	Created int64  `json:"created"`
+	Model   string `json:"model"`
+	Choices []struct {
+		Index   int     `json:"index"`
+		Message Message `json:"message,omitempty"`
+		Text    string  `json:"text,omitempty"`
+		Finish  string  `json:"finish_reason"`
+	} `json:"choices"`
+	Usage struct {
+		PromptTokens     int `json:"prompt_tokens"`
+		CompletionTokens int `json:"completion_tokens"`
+		TotalTokens      int `json:"total_tokens"`
+	} `json:"usage"`
+}
 
 type Model struct {
 	String      string `json:"id"`
@@ -69,5 +69,5 @@ type LLMProvider interface {
 	// Completion(request CompletionRequest) (*CompletionResponse, error)
 
 	// ChatCompletion performs a chat completion
-	// ChatCompletion(request CompletionRequest) (*CompletionResponse, error)
+	ChatCompletion(request CompletionRequest) (*CompletionResponse, error)
 }

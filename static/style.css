@@ -721,6 +721,7 @@ main {
     flex-direction: column;
     gap: 3rem;
     margin-bottom: 17rem;
+    width: 100%;
 }
 
 .message {
@@ -795,4 +796,9 @@ main {
 
 pre {
     overflow-x: auto;
+}
+
+#indicator svg {
+    width: 3rem;
+    margin-left: 2rem;
 }

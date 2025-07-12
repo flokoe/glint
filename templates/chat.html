@@ -24,14 +24,39 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <main :class="sidebarOpen || 'main-margin-collapsed-sidebar'">
     <div class="scrollbar-to-the-side">
         <div class="wrapper">
+            <div class="messages">
+                <div id="indicator" class="htmx-indicator">
+                    <!-- By Sam Herbert (@sherb), for everyone. More @ http://goo.gl/7AJzbL -->
+                    <svg width="120" height="30" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg" fill="#fff">
+                        <circle cx="15" cy="15" r="15">
+                            <animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear"
+                                repeatCount="indefinite" />
+                            <animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear"
+                                repeatCount="indefinite" />
+                        </circle>
+                        <circle cx="60" cy="15" r="9" fill-opacity="0.3">
+                            <animate attributeName="r" from="9" to="9" begin="0s" dur="0.8s" values="9;15;9" calcMode="linear"
+                                repeatCount="indefinite" />
+                            <animate attributeName="fill-opacity" from="0.5" to="0.5" begin="0s" dur="0.8s" values=".5;1;.5"
+                                calcMode="linear" repeatCount="indefinite" />
+                        </circle>
+                        <circle cx="105" cy="15" r="15">
+                            <animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear"
+                                repeatCount="indefinite" />
+                            <animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear"
+                                repeatCount="indefinite" />
+                        </circle>
+                    </svg>
+                </div>
+            </div>
             <div class="text-input-container" x-data="{ content: '' }">
                 <div class="textarea-container">
-                    <form>
+                    <form hx-post="/api/completion" hx-target="#indicator" hx-swap="beforebegin show:target:top" hx-indicator="#indicator">
                         <textarea placeholder="Type your message here..." x-model="content" name="content" x-grow></textarea>
 
                         <div class="toolbar">
                             <div class="model-settings">
-                                <button class="model">
+                                <!-- <button class="model">
                                     <!-- <div class="model-list">
                                             <ul>
                                                 <li>
@@ -96,16 +121,26 @@ SPDX-License-Identifier: AGPL-3.0-or-later
                                                 <li>Gwen 3 24B</li>
                                                 <li>Gemma 3 14B</li>
                                             </ul>
-                                        </div> -->
+                                        </div>
 
                                     Granite 3.3 8B
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                         <path fill="none" stroke="currentColor" stroke-linecap="round"
                                             stroke-linejoin="round" stroke-width="2" d="m6 9l6 6l6-6" />
                                     </svg>
-                                </button>
+                                </button> -->
 
-                                <input type="checkbox" id="temporary-chat" name="temporary-chat"
+                                <select name="llm">
+                                    {{ with .LLMs }}
+                                    {{ range . }}
+                                    <option value="{{ .String }}">
+                                        {{ .Name }}
+                                    </option>
+                                    {{ end }}
+                                    {{ end }}
+                                </select>
+
+                                <!-- <input type="checkbox" id="temporary-chat" name="temporary-chat"
                                     class="model-settings-checkbox" />
                                 <label for="temporary-chat" class="model-settings-label"
                                     title="Turn on temporary chat"><svg xmlns="http://www.w3.org/2000/svg" width="24"
@@ -129,9 +164,13 @@ SPDX-License-Identifier: AGPL-3.0-or-later
                                         </g>
                                     </svg>
                                     Thinking
-                                </label>
+                                </label> -->
                             </div>
-                            <button class="send-btn" type="submit" disabled x-bind:disabled="!content.length">
+                            <button
+                                class="send-btn"
+                                type="submit"
+                                disabled
+                                x-bind:disabled="!content.length">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                     <path fill="none" stroke="currentColor" stroke-linecap="round"
                                         stroke-linejoin="round" stroke-width="2" d="m5 12l7-7l7 7m-7 7V5" />

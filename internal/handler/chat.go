@@ -27,18 +27,67 @@ import (
 	"github.com/labstack/echo/v4"
 
 	"github.com/flokoe/clairvoyance/internal/database"
+	"github.com/flokoe/clairvoyance/internal/llm"
 )
 
 type ChatHandler struct {
 	queries *database.Queries
+	infer   llm.LLMProvider
 }
 
-func NewChatHandler(db *sql.DB) *ChatHandler {
+func NewChatHandler(db *sql.DB, provider llm.LLMProvider) *ChatHandler {
 	return &ChatHandler{
 		queries: database.New(db),
+		infer: provider,
 	}
 }
 
+type chatData struct {
+	LLMs []database.Llms
+}
+
 func (h *ChatHandler) ChatView(c echo.Context) error {
-	return c.Render(http.StatusOK, "chat.html", "Sun")
+	LLMs, err := h.queries.GetLLMs(c.Request().Context())
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "failed to fetch LLMs")
+	}
+
+	data := chatData{
+		LLMs,
+	}
+
+	return c.Render(http.StatusOK, "chat.html", data)
+}
+
+type chatInputDTO struct {
+	Content string `form:"content"`
+	Llm     string `form:"llm"`
+}
+
+type responseData struct {
+	UserMessage string
+	Completion  string
+}
+
+func (h *ChatHandler) ApiCompletion(c echo.Context) error {
+	a := new(chatInputDTO)
+	if err := c.Bind(a); err != nil {
+		return c.String(http.StatusBadRequest, "bad request")
+	}
+
+	result, err := h.infer.ChatCompletion(llm.CompletionRequest{
+		Model:       a.Llm,
+		Messages:    []llm.Message{{Role: "user", Content: a.Content}},
+	})
+	if err != nil {
+		c.Logger().Error("Completion failed:", err)
+		return c.String(http.StatusInternalServerError, "Completion failed")
+	}
+
+	data := responseData{
+		UserMessage: a.Content,
+		Completion:  result.Choices[0].Message.Content,
+	}
+
+	return c.Render(http.StatusOK, "firstCompletion.html", data)
 }

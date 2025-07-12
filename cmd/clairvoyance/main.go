@@ -34,6 +34,7 @@ import (
 	_ "modernc.org/sqlite"
 
 	"github.com/flokoe/clairvoyance/internal/handler"
+	"github.com/flokoe/clairvoyance/internal/llm"
 )
 
 type templateRegistry struct {
@@ -54,7 +55,14 @@ func main() {
 	}
 	defer db.Close()
 
-	chatHandler := handler.NewChatHandler(db)
+	LLMProvider, err := llm.NewProvider("openai-compatible", map[string]string{
+		"base_url": "http://127.0.0.1:8080",
+	})
+	if err != nil {
+		log.Fatal("Failed to create LLM provider:", err)
+	}
+
+	chatHandler := handler.NewChatHandler(db, LLMProvider)
 	adminHandler := handler.NewAdminHandler(db)
 
 	e := echo.New()
@@ -70,6 +78,8 @@ func main() {
 
 	e.GET("/", chatHandler.ChatView)
 	e.GET("/admin", adminHandler.AdminView)
+
+	e.POST("/api/completion", chatHandler.ApiCompletion)
 
 	e.POST("/api/admin/providers", adminHandler.ApiAddProvider)
 

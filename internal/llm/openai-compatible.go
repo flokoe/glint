@@ -133,20 +133,20 @@ func (c *OpenAICompatibleClient) GetModels() (*ModelsResponse, error) {
 // 	return &completion, nil
 // }
 
-// // ChatCompletion implements the LLMProvider interface
-// func (c *OpenAICompatibleClient) ChatCompletion(request CompletionRequest) (*CompletionResponse, error) {
-// 	respBody, err := c.makeRequest("POST", "/v1/chat/completions", request)
-// 	if err != nil {
-// 		return nil, err
-// 	}
+// ChatCompletion implements the LLMProvider interface
+func (c *OpenAICompatibleClient) ChatCompletion(request CompletionRequest) (*CompletionResponse, error) {
+	respBody, err := c.makeRequest("POST", "/v1/chat/completions", request)
+	if err != nil {
+		return nil, err
+	}
 
-// 	var completion CompletionResponse
-// 	if err := json.Unmarshal(respBody, &completion); err != nil {
-// 		return nil, fmt.Errorf("failed to unmarshal chat completion response: %w", err)
-// 	}
+	var completion CompletionResponse
+	if err := json.Unmarshal(respBody, &completion); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal chat completion response: %w", err)
+	}
 
-// 	return &completion, nil
-// }
+	return &completion, nil
+}
 
 // // Example usage
 // func ExampleUsage() {
