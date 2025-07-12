@@ -1,0 +1,80 @@
+{{- /*
+Clairvoyance - A feature-rich web based AI chat UI
+Copyright (C) 2025 Florian Köhler
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+SPDX-License-Identifier: AGPL-3.0-only
+*/ -}}
+
+<dialog class="searchDialog" x-ref="searchDialog">
+    <div @click.outside.capture="$refs.searchDialog.close()">
+        <form method="dialog">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                :class="searchFocused && 'search-focused'">
+                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <path d="m21 21l-4.34-4.34" />
+                    <circle cx="11" cy="11" r="8" />
+                </g>
+            </svg>
+            <input type="search" x-model="search" autofocus
+                placeholder="Type to search or press Enter to start new chat..."
+                @keydown.down="$focus.within($refs.results).first()" @focus="searchFocused = true"
+                @blur="searchFocused = false" />
+            <button class="search-close-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2" d="M18 6L6 18M6 6l12 12" />
+                </svg>
+                <span class="shortcut-popup">
+                    <kbd>Esc</kbd>
+                </span>
+            </button>
+        </form>
+
+        <div class="result-list">
+            <div class="list-header">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2">
+                        <path d="M3 12a9 9 0 1 0 9-9a9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                        <path d="M3 3v5h5m4-1v5l4 2" />
+                    </g>
+                </svg>
+                <span>Recent</span>
+            </div>
+
+            <ul x-ref="results" @keydown.down="$focus.wrap().next()" @keydown.up="$focus.wrap().previous()">
+                <li x-show="showItem($el)">
+                    <a href="#" class="result-item">
+                        Designing a modern interface lorem ipsum
+                        huhu
+                    </a>
+                </li>
+                <li x-show="showItem($el)">
+                    <a href="#" class="result-item">
+                        Let's break down the timeline lorem ipsum
+                        huhu
+                    </a>
+                </li>
+                <li x-show="showItem($el)">
+                    <a href="#" class="result-item">
+                        The implementation looks good lorem ipsum
+                        huhu
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</dialog>
