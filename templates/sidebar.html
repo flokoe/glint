@@ -21,6 +21,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 <aside class="sidebar" x-show="sidebarOpen">
     <div class="logo-container">
         <span class="logo-text">Clairvoyance</span>
+
         <button class="sidebar-close-btn" @click="sidebarOpen = !sidebarOpen">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -33,7 +34,11 @@ SPDX-License-Identifier: AGPL-3.0-only
         </button>
     </div>
 
-    <button class="new-chat-btn">
+    <button
+        class="new-chat-btn"
+        hx-get="/api/chat"
+        hx-target="main"
+        hx-replace-url="/">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
             <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                 <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />

@@ -79,6 +79,8 @@ func main() {
 	e.GET("/", chatHandler.ChatView)
 	e.GET("/admin", adminHandler.AdminView)
 
+	e.GET("/api/chat", chatHandler.ChatContent)
+
 	e.POST("/api/completion", chatHandler.ApiCompletion)
 
 	e.POST("/api/admin/providers", adminHandler.ApiAddProvider)

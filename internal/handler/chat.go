@@ -56,7 +56,16 @@ func (h *ChatHandler) ChatView(c echo.Context) error {
 		LLMs,
 	}
 
-	return c.Render(http.StatusOK, "chat.html", data)
+	return c.Render(http.StatusOK, "02-chat.html", data)
+}
+
+func (h *ChatHandler) ChatContent(c echo.Context) error {
+	LLMs, err := h.queries.GetLLMs(c.Request().Context())
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "failed to fetch LLMs")
+	}
+
+	return c.Render(http.StatusOK, "chat-content.html", LLMs)
 }
 
 type chatInputDTO struct {

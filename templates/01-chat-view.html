@@ -21,7 +21,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 {{ template "00-base.html" . }}
 
 {{ define "view" }}
-<div class="container" x-data="{
+<div
+    class="container"
+    x-data="{
         sidebarOpen: true,
         search: '',
         showItem(el) {
@@ -31,7 +33,9 @@ SPDX-License-Identifier: AGPL-3.0-only
     }"
     @keydown.ctrl.b.window.prevent="sidebarOpen = !sidebarOpen"
     @keydown.slash.window.prevent="$refs.searchDialog.showModal()"
-    @keydown.ctrl.k.window.prevent="$refs.searchDialog.showModal()">
+    @keydown.ctrl.k.window.prevent="$refs.searchDialog.showModal()"
+    @keydown.ctrl.shift.o.window.prevent="htmx.trigger('.new-chat-btn', 'click')"
+>
 
     {{ template "search-dialog.html" . }}
 
@@ -39,8 +43,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 
     {{ template "sidebar.html" . }}
 
-    {{ block "content" . }}
-    default chat view content
-    {{ end }}
+    <main :class="sidebarOpen || 'main-margin-collapsed-sidebar'">
+        {{ block "content" .LLMs }}
+        default chat view content
+        {{ end }}
+    </main>
 </div>
 {{ end }}
