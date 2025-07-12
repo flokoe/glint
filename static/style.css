@@ -538,6 +538,9 @@ main {
     /* thumb + transparent track */
     scrollbar-gutter: stable both-edges;
     /* reserve layout space */
+
+    scroll-snap-type: y proximity;
+    scroll-padding: 2rem;
 }
 
 .wrapper {
@@ -755,6 +758,7 @@ main {
 
 .message-container.user {
     align-items: end;
+    scroll-snap-align: start;
 }
 
 .message-options {

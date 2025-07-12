@@ -51,7 +51,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
             </div>
             <div class="text-input-container" x-data="{ content: '' }">
                 <div class="textarea-container">
-                    <form hx-post="/api/completion" hx-target="#indicator" hx-swap="beforebegin show:target:top" hx-indicator="#indicator">
+                    <form hx-post="/api/completion" hx-target="#indicator" hx-swap="beforebegin show:top" hx-indicator="#indicator">
                         <textarea placeholder="Type your message here..." x-model="content" name="content" x-grow></textarea>
 
                         <div class="toolbar">
