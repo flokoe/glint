@@ -104,7 +104,7 @@ button {
 .shortcut-popup {
     background: var(--glass-white);
     position: absolute;
-    left: calc(100% + 1rem);
+    left: calc(100% + .75rem);
     border: 1px solid var(--glass-border);
     border-radius: 0.5rem;
     padding: 0.4rem 0.6rem 0.4rem 0.6rem;
@@ -209,9 +209,7 @@ button:hover .shortcut-popup {
 }
 
 .new-chat-btn {
-    background: linear-gradient(135deg,
-            var(--accent) 0%,
-            #5856d6 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, #5856d6 100%);
     border: none;
     display: flex;
     justify-content: center;
@@ -224,7 +222,7 @@ button:hover .shortcut-popup {
     border-radius: 1rem;
     box-shadow: 0 0.3rem 1.3rem var(--accent-glow);
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    margin: 0 1rem;
+    margin: 0 1.2rem;
 }
 
 .new-chat-btn:hover {
@@ -250,7 +248,7 @@ button:hover .shortcut-popup {
     border-radius: 1rem;
     border: 1px solid var(--glass-border);
     transition: all 0.3s ease;
-    margin: 0 1rem;
+    margin: 0 1.2rem;
 }
 
 .search-btn svg {
