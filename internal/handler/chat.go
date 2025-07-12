@@ -43,7 +43,7 @@ func NewChatHandler(db *sql.DB, provider llm.LLMProvider) *ChatHandler {
 }
 
 type chatData struct {
-	LLMs []database.Llms
+	LLMs []database.Llm
 }
 
 func (h *ChatHandler) ChatView(c echo.Context) error {

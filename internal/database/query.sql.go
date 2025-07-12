@@ -10,8 +10,7 @@ import (
 )
 
 const addLLM = `-- name: AddLLM :one
-INSERT INTO ` + "`" + `llms` + "`" + ` (` + "`" + `string` + "`" + `, ` + "`" + `name` + "`" + `, ` + "`" + `provider_id` + "`" + `, ` + "`" + `context_size` + "`" + `)
-VALUES (?, ?, ?, ?) RETURNING ` + "`" + `id` + "`" + `, ` + "`" + `string` + "`" + `, ` + "`" + `name` + "`" + `, ` + "`" + `provider_id` + "`" + `, ` + "`" + `context_size` + "`" + `, ` + "`" + `capabilities` + "`" + `, ` + "`" + `is_enabled` + "`" + `, ` + "`" + `created_at` + "`" + `, ` + "`" + `updated_at` + "`" + `
+INSERT INTO llms (string, name, provider_id, context_size) VALUES (?, ?, ?, ?) RETURNING id, string, name, provider_id, context_size, capabilities, is_enabled, created_at, updated_at
 `
 
 type AddLLMParams struct {
@@ -21,14 +20,14 @@ type AddLLMParams struct {
 	ContextSize int64
 }
 
-func (q *Queries) AddLLM(ctx context.Context, arg AddLLMParams) (Llms, error) {
+func (q *Queries) AddLLM(ctx context.Context, arg AddLLMParams) (Llm, error) {
 	row := q.db.QueryRowContext(ctx, addLLM,
 		arg.String,
 		arg.Name,
 		arg.ProviderID,
 		arg.ContextSize,
 	)
-	var i Llms
+	var i Llm
 	err := row.Scan(
 		&i.ID,
 		&i.String,
@@ -44,7 +43,7 @@ func (q *Queries) AddLLM(ctx context.Context, arg AddLLMParams) (Llms, error) {
 }
 
 const addProvider = `-- name: AddProvider :one
-INSERT INTO ` + "`" + `providers` + "`" + ` (` + "`" + `type` + "`" + `, ` + "`" + `url` + "`" + `) VALUES (?, ?) RETURNING ` + "`" + `id` + "`" + `, ` + "`" + `type` + "`" + `, ` + "`" + `url` + "`" + `, ` + "`" + `created_at` + "`" + `
+INSERT INTO providers (type, url) VALUES (?, ?) RETURNING id, type, url, created_at
 `
 
 type AddProviderParams struct {
@@ -52,9 +51,9 @@ type AddProviderParams struct {
 	Url  string
 }
 
-func (q *Queries) AddProvider(ctx context.Context, arg AddProviderParams) (Providers, error) {
+func (q *Queries) AddProvider(ctx context.Context, arg AddProviderParams) (Provider, error) {
 	row := q.db.QueryRowContext(ctx, addProvider, arg.Type, arg.Url)
-	var i Providers
+	var i Provider
 	err := row.Scan(
 		&i.ID,
 		&i.Type,
@@ -65,18 +64,18 @@ func (q *Queries) AddProvider(ctx context.Context, arg AddProviderParams) (Provi
 }
 
 const getLLMs = `-- name: GetLLMs :many
-SELECT ` + "`" + `id` + "`" + `, ` + "`" + `string` + "`" + `, ` + "`" + `name` + "`" + `, ` + "`" + `provider_id` + "`" + `, ` + "`" + `context_size` + "`" + `, ` + "`" + `capabilities` + "`" + `, ` + "`" + `is_enabled` + "`" + `, ` + "`" + `created_at` + "`" + `, ` + "`" + `updated_at` + "`" + ` FROM ` + "`" + `llms` + "`" + ` ORDER BY ` + "`" + `id` + "`" + `
+SELECT id, string, name, provider_id, context_size, capabilities, is_enabled, created_at, updated_at FROM llms ORDER BY id
 `
 
-func (q *Queries) GetLLMs(ctx context.Context) ([]Llms, error) {
+func (q *Queries) GetLLMs(ctx context.Context) ([]Llm, error) {
 	rows, err := q.db.QueryContext(ctx, getLLMs)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Llms
+	var items []Llm
 	for rows.Next() {
-		var i Llms
+		var i Llm
 		if err := rows.Scan(
 			&i.ID,
 			&i.String,
@@ -102,18 +101,18 @@ func (q *Queries) GetLLMs(ctx context.Context) ([]Llms, error) {
 }
 
 const getProviders = `-- name: GetProviders :many
-SELECT ` + "`" + `id` + "`" + `, ` + "`" + `type` + "`" + `, ` + "`" + `url` + "`" + `, ` + "`" + `created_at` + "`" + ` FROM ` + "`" + `providers` + "`" + ` ORDER BY ` + "`" + `id` + "`" + `
+SELECT id, type, url, created_at FROM providers ORDER BY id
 `
 
-func (q *Queries) GetProviders(ctx context.Context) ([]Providers, error) {
+func (q *Queries) GetProviders(ctx context.Context) ([]Provider, error) {
 	rows, err := q.db.QueryContext(ctx, getProviders)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Providers
+	var items []Provider
 	for rows.Next() {
-		var i Providers
+		var i Provider
 		if err := rows.Scan(
 			&i.ID,
 			&i.Type,

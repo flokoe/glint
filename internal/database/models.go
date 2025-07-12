@@ -8,7 +8,7 @@ import (
 	"database/sql"
 )
 
-type Conversations struct {
+type Conversation struct {
 	ID        int64
 	UserID    sql.NullInt64
 	Uuid      string
@@ -17,7 +17,7 @@ type Conversations struct {
 	UpdatedAt sql.NullInt64
 }
 
-type Llms struct {
+type Llm struct {
 	ID           int64
 	String       string
 	Name         string
@@ -29,7 +29,7 @@ type Llms struct {
 	UpdatedAt    int64
 }
 
-type Messages struct {
+type Message struct {
 	ID              int64
 	ConversationID  sql.NullInt64
 	ParentID        sql.NullInt64
@@ -41,14 +41,14 @@ type Messages struct {
 	CreatedAt       sql.NullInt64
 }
 
-type Providers struct {
+type Provider struct {
 	ID        int64
 	Type      string
 	Url       string
 	CreatedAt int64
 }
 
-type Users struct {
+type User struct {
 	ID        int64
 	Name      string
 	Email     string

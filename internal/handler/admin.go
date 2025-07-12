@@ -41,8 +41,8 @@ func NewAdminHandler(db *sql.DB) *ChatHandler {
 }
 
 type AdminViewData struct {
-	Providers []database.Providers
-	LLMs      []database.Llms
+	Providers []database.Provider
+	LLMs      []database.Llm
 }
 
 func (h *ChatHandler) AdminView(c echo.Context) error {
