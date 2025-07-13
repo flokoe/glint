@@ -33,6 +33,7 @@ CREATE TABLE conversations (
     user_id    integer NOT NULL,
     uuid       text    NOT NULL,
     title      text    DEFAULT 'New chat',
+    is_pinned  integer NOT NULL DEFAULT FALSE,
     created_at integer NOT NULL DEFAULT (unixepoch('now')),
     updated_at integer NOT NULL DEFAULT (unixepoch('now')),
 

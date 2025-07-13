@@ -25,6 +25,9 @@ SELECT * FROM conversations WHERE uuid = ? LIMIT 1;
 -- name: GetConversationsByUserID :many
 SELECT * FROM conversations WHERE user_id = ? ORDER BY created_at;
 
+-- name: GetPinnedConversationsByUserID :many
+SELECT * FROM conversations WHERE user_id = ? AND is_pinned = 1 ORDER BY created_at;
+
 -- name: AddConversation :one
 INSERT INTO conversations (user_id, uuid) VALUES (?, ?) RETURNING *;
 

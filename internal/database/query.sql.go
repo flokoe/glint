@@ -11,7 +11,7 @@ import (
 )
 
 const addConversation = `-- name: AddConversation :one
-INSERT INTO conversations (user_id, uuid) VALUES (?, ?) RETURNING id, user_id, uuid, title, created_at, updated_at
+INSERT INTO conversations (user_id, uuid) VALUES (?, ?) RETURNING id, user_id, uuid, title, is_pinned, created_at, updated_at
 `
 
 type AddConversationParams struct {
@@ -27,6 +27,7 @@ func (q *Queries) AddConversation(ctx context.Context, arg AddConversationParams
 		&i.UserID,
 		&i.Uuid,
 		&i.Title,
+		&i.IsPinned,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -88,7 +89,7 @@ func (q *Queries) AddProvider(ctx context.Context, arg AddProviderParams) (Provi
 }
 
 const getConversationByID = `-- name: GetConversationByID :one
-SELECT id, user_id, uuid, title, created_at, updated_at FROM conversations WHERE id = ? LIMIT 1
+SELECT id, user_id, uuid, title, is_pinned, created_at, updated_at FROM conversations WHERE id = ? LIMIT 1
 `
 
 func (q *Queries) GetConversationByID(ctx context.Context, id int64) (Conversation, error) {
@@ -99,6 +100,7 @@ func (q *Queries) GetConversationByID(ctx context.Context, id int64) (Conversati
 		&i.UserID,
 		&i.Uuid,
 		&i.Title,
+		&i.IsPinned,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -106,7 +108,7 @@ func (q *Queries) GetConversationByID(ctx context.Context, id int64) (Conversati
 }
 
 const getConversationByUUID = `-- name: GetConversationByUUID :one
-SELECT id, user_id, uuid, title, created_at, updated_at FROM conversations WHERE uuid = ? LIMIT 1
+SELECT id, user_id, uuid, title, is_pinned, created_at, updated_at FROM conversations WHERE uuid = ? LIMIT 1
 `
 
 func (q *Queries) GetConversationByUUID(ctx context.Context, uuid string) (Conversation, error) {
@@ -117,6 +119,7 @@ func (q *Queries) GetConversationByUUID(ctx context.Context, uuid string) (Conve
 		&i.UserID,
 		&i.Uuid,
 		&i.Title,
+		&i.IsPinned,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -124,7 +127,7 @@ func (q *Queries) GetConversationByUUID(ctx context.Context, uuid string) (Conve
 }
 
 const getConversationsByUserID = `-- name: GetConversationsByUserID :many
-SELECT id, user_id, uuid, title, created_at, updated_at FROM conversations WHERE user_id = ? ORDER BY created_at
+SELECT id, user_id, uuid, title, is_pinned, created_at, updated_at FROM conversations WHERE user_id = ? ORDER BY created_at
 `
 
 func (q *Queries) GetConversationsByUserID(ctx context.Context, userID int64) ([]Conversation, error) {
@@ -141,6 +144,7 @@ func (q *Queries) GetConversationsByUserID(ctx context.Context, userID int64) ([
 			&i.UserID,
 			&i.Uuid,
 			&i.Title,
+			&i.IsPinned,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {
@@ -178,6 +182,41 @@ func (q *Queries) GetLLMs(ctx context.Context) ([]Llm, error) {
 			&i.ContextSize,
 			&i.Capabilities,
 			&i.IsEnabled,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getPinnedConversationsByUserID = `-- name: GetPinnedConversationsByUserID :many
+SELECT id, user_id, uuid, title, is_pinned, created_at, updated_at FROM conversations WHERE user_id = ? AND is_pinned = 1 ORDER BY created_at
+`
+
+func (q *Queries) GetPinnedConversationsByUserID(ctx context.Context, userID int64) ([]Conversation, error) {
+	rows, err := q.db.QueryContext(ctx, getPinnedConversationsByUserID, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Conversation
+	for rows.Next() {
+		var i Conversation
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Uuid,
+			&i.Title,
+			&i.IsPinned,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {

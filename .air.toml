@@ -1,6 +1,6 @@
 [build]
   cmd = "go build -o ./tmp/main cmd/clairvoyance/main.go"
-  exclude_dir = ["mockups"]
+  exclude_dir = ["mockups", "sqld"]
 
 [proxy]
   app_port   = 1323

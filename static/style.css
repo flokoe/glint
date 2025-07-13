@@ -808,3 +808,11 @@ pre {
     width: 3rem;
     margin-left: 2rem;
 }
+
+
+.empty-list {
+    padding: .9rem 0.7rem;
+    border: 1px solid transparent;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}

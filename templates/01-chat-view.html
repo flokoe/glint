@@ -41,7 +41,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
     {{ template "sidebar-collapsed.html" . }}
 
-    {{ template "sidebar.html" . }}
+    {{ template "sidebar.html" .Convos }}
 
     <main :class="sidebarOpen || 'main-margin-collapsed-sidebar'">
         {{ block "content" .LLMs }}

@@ -44,6 +44,10 @@ func NewChatHandler(db *sql.DB, provider llm.LLMProvider) *ChatHandler {
 
 type chatData struct {
 	LLMs []database.Llm
+	Convos struct{
+		All []database.Conversation
+		Pinned []database.Conversation
+	}
 }
 
 func (h *ChatHandler) ChatView(c echo.Context) error {
@@ -52,8 +56,25 @@ func (h *ChatHandler) ChatView(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, "failed to fetch LLMs")
 	}
 
+	conversations, err := h.queries.GetConversationsByUserID(c.Request().Context(), 1)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "failed to fetch conversations")
+	}
+
+	pinnedConversations, err := h.queries.GetPinnedConversationsByUserID(c.Request().Context(), 1)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "failed to fetch pinned conversations")
+	}
+
 	data := chatData{
-		LLMs,
+		LLMs: LLMs,
+		Convos: struct {
+			All    []database.Conversation
+			Pinned []database.Conversation
+		}{
+			All:    conversations,
+			Pinned: pinnedConversations,
+		},
 	}
 
 	return c.Render(http.StatusOK, "02-chat.html", data)

@@ -13,6 +13,7 @@ type Conversation struct {
 	UserID    int64
 	Uuid      string
 	Title     sql.NullString
+	IsPinned  int64
 	CreatedAt int64
 	UpdatedAt int64
 }
