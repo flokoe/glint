@@ -10,30 +10,6 @@ import (
 	"database/sql"
 )
 
-const addConversation = `-- name: AddConversation :one
-INSERT INTO conversations (user_id, uuid) VALUES (?, ?) RETURNING id, user_id, uuid, title, is_pinned, created_at, updated_at
-`
-
-type AddConversationParams struct {
-	UserID int64
-	Uuid   string
-}
-
-func (q *Queries) AddConversation(ctx context.Context, arg AddConversationParams) (Conversation, error) {
-	row := q.db.QueryRowContext(ctx, addConversation, arg.UserID, arg.Uuid)
-	var i Conversation
-	err := row.Scan(
-		&i.ID,
-		&i.UserID,
-		&i.Uuid,
-		&i.Title,
-		&i.IsPinned,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-	)
-	return i, err
-}
-
 const addLLM = `-- name: AddLLM :one
 INSERT INTO llms (string, name, provider_id, context_size) VALUES (?, ?, ?, ?) RETURNING id, string, name, provider_id, context_size, capabilities, is_enabled, created_at, updated_at
 `
@@ -83,6 +59,64 @@ func (q *Queries) AddProvider(ctx context.Context, arg AddProviderParams) (Provi
 		&i.ID,
 		&i.Type,
 		&i.Url,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const createConversation = `-- name: CreateConversation :one
+INSERT INTO conversations (user_id, uuid) VALUES (?, ?) RETURNING id, user_id, uuid, title, is_pinned, created_at, updated_at
+`
+
+type CreateConversationParams struct {
+	UserID int64
+	Uuid   string
+}
+
+func (q *Queries) CreateConversation(ctx context.Context, arg CreateConversationParams) (Conversation, error) {
+	row := q.db.QueryRowContext(ctx, createConversation, arg.UserID, arg.Uuid)
+	var i Conversation
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Uuid,
+		&i.Title,
+		&i.IsPinned,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const createMessage = `-- name: CreateMessage :one
+INSERT INTO messages (conversation_id, parent_id, role, content, llm_id) VALUES (?, ?, ?, ?, ?) RETURNING id, conversation_id, parent_id, role, content, content_rendered, llm_id, created_at
+`
+
+type CreateMessageParams struct {
+	ConversationID int64
+	ParentID       sql.NullInt64
+	Role           string
+	Content        string
+	LlmID          int64
+}
+
+func (q *Queries) CreateMessage(ctx context.Context, arg CreateMessageParams) (Message, error) {
+	row := q.db.QueryRowContext(ctx, createMessage,
+		arg.ConversationID,
+		arg.ParentID,
+		arg.Role,
+		arg.Content,
+		arg.LlmID,
+	)
+	var i Message
+	err := row.Scan(
+		&i.ID,
+		&i.ConversationID,
+		&i.ParentID,
+		&i.Role,
+		&i.Content,
+		&i.ContentRendered,
+		&i.LlmID,
 		&i.CreatedAt,
 	)
 	return i, err

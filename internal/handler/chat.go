@@ -24,6 +24,7 @@ import (
 	"database/sql"
 	"net/http"
 
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 
 	"github.com/flokoe/clairvoyance/internal/database"
@@ -92,6 +93,7 @@ func (h *ChatHandler) ChatContent(c echo.Context) error {
 type chatInputDTO struct {
 	Content string `form:"content"`
 	Llm     string `form:"llm"`
+	UUID 	string `param:"UUID"`
 }
 
 type responseData struct {
@@ -105,6 +107,32 @@ func (h *ChatHandler) ApiCompletion(c echo.Context) error {
 		return c.String(http.StatusBadRequest, "bad request")
 	}
 
+	var newConversationUUID uuid.UUID
+	if a.UUID == "" {
+		newConversationUUID = uuid.New()
+	} else {
+		conversationUUID := a.UUID
+		if uuid.Validate(conversationUUID) != nil {
+			return c.String(http.StatusBadRequest, "invalid conversation UUID")
+		}
+	}
+
+	var conversationID int64
+	if newConversationUUID != uuid.Nil {
+		conversationResult, err := h.queries.CreateConversation(
+			c.Request().Context(),
+			database.CreateConversationParams{
+				UserID: 1,
+				Uuid:   newConversationUUID.String(),
+			},
+		)
+
+		if err != nil {
+			c.Logger().Error("Failed to create conversation:", err)
+		}
+		conversationID = conversationResult.ID
+	}
+
 	result, err := h.infer.ChatCompletion(llm.CompletionRequest{
 		Model:       a.Llm,
 		Messages:    []llm.Message{{Role: "user", Content: a.Content}},
@@ -113,6 +141,31 @@ func (h *ChatHandler) ApiCompletion(c echo.Context) error {
 		c.Logger().Error("Completion failed:", err)
 		return c.String(http.StatusInternalServerError, "Completion failed")
 	}
+
+	userMessageResult, err := h.queries.CreateMessage(
+		c.Request().Context(),
+		database.CreateMessageParams{
+			ConversationID: conversationID,
+			Role:           "user",
+			Content:        a.Content,
+			LlmID:          1,
+		},
+	)
+	if err != nil {
+		c.Logger().Error("Failed to create user message:", err)
+		return c.String(http.StatusInternalServerError, "Failed to create user message")
+	}
+
+	_, err = h.queries.CreateMessage(
+		c.Request().Context(),
+		database.CreateMessageParams{
+			ConversationID: conversationID,
+			ParentID:       sql.NullInt64{Int64: userMessageResult.ID, Valid: true},
+			Role:           "assistant",
+			Content:        result.Choices[0].Message.Content,
+			LlmID:          1,
+		},
+	)
 
 	data := responseData{
 		UserMessage: a.Content,

@@ -43,15 +43,14 @@ CREATE TABLE conversations (
 
 CREATE TABLE messages (
     id               integer PRIMARY KEY AUTOINCREMENT,
-    conversation_id  integer,
+    conversation_id  integer NOT NULL,
     parent_id        integer,
     role             text    NOT NULL,
     content          text    NOT NULL,
     content_rendered text,
-    llm_id           integer,
-    branch_path      text,
-    created_at       integer,
+    llm_id           integer NOT NULL,
+    created_at       integer NOT NULL DEFAULT (unixepoch('now')),
 
-    CONSTRAINT fk_messages_llm FOREIGN KEY (llm_id) REFERENCES llms (id),
+    CONSTRAINT fk_messages_llms FOREIGN KEY (llm_id) REFERENCES llms (id),
     CONSTRAINT fk_conversations_messages FOREIGN KEY (conversation_id) REFERENCES conversations (id)
 );

@@ -28,8 +28,11 @@ SELECT * FROM conversations WHERE user_id = ? ORDER BY created_at;
 -- name: GetPinnedConversationsByUserID :many
 SELECT * FROM conversations WHERE user_id = ? AND is_pinned = 1 ORDER BY created_at;
 
--- name: AddConversation :one
+-- name: CreateConversation :one
 INSERT INTO conversations (user_id, uuid) VALUES (?, ?) RETURNING *;
 
 -- name: UpdateConversationTitle :exec
 UPDATE conversations set title = ?, updated_at = unixepoch('now') WHERE uuid = ?;
+
+-- name: CreateMessage :one
+INSERT INTO messages (conversation_id, parent_id, role, content, llm_id) VALUES (?, ?, ?, ?, ?) RETURNING *;

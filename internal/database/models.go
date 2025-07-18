@@ -32,14 +32,13 @@ type Llm struct {
 
 type Message struct {
 	ID              int64
-	ConversationID  sql.NullInt64
+	ConversationID  int64
 	ParentID        sql.NullInt64
 	Role            string
 	Content         string
 	ContentRendered sql.NullString
-	LlmID           sql.NullInt64
-	BranchPath      sql.NullString
-	CreatedAt       sql.NullInt64
+	LlmID           int64
+	CreatedAt       int64
 }
 
 type Provider struct {
