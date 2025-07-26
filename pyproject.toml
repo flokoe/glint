@@ -1,0 +1,10 @@
+[project]
+name = "clairvoyance-backend"
+version = "0.1.0"
+description = "A feature-rich web-based AI chat UI"
+readme = "README.md"
+license = "AGPL-3.0-only"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[standard]>=0.116.1",
+]
