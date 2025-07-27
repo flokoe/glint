@@ -20,7 +20,7 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    single_user: bool = True
+    single_user_mode: bool = True
 
 
 settings = Settings()

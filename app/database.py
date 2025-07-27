@@ -18,7 +18,8 @@
 
 from sqlmodel import Session, SQLModel, create_engine
 
-import model.user
+from config import settings
+from model.user import User
 
 sqlite_url = "sqlite:///clairvoyance.db"
 engine = create_engine(sqlite_url, connect_args={"check_same_thread": False})
@@ -28,9 +29,18 @@ def create_schema_and_tables():
     SQLModel.metadata.create_all(engine)
 
 
-def seed():
-    # Placeholder for seeding logic, if needed
-    pass
+def seed() -> None:
+    # AIDEV-NOTE: Only create default user in single-user mode
+    if not settings.single_user_mode:
+        return
+
+    with Session(engine) as session:
+        # AIDEV-NOTE: Check if default user already exists to avoid duplicates
+        existing_user = session.get(User, 1)
+        if existing_user is None:
+            user = User(email="zaphod@pangalactic.gov", name="Zaphod Beeblebrox", is_admin=True)
+            session.add(user)
+            session.commit()
 
 
 def get_session():
