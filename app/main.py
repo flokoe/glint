@@ -16,11 +16,20 @@
 
 # SPDX-License-Identifier: AGPL-3.0-only
 
-from fastapi import FastAPI
+from contextlib import asynccontextmanager
+from typing import Annotated
 
-app = FastAPI()
+from fastapi import Depends, FastAPI
+from sqlmodel import Session
 
+import database
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+SessionDep = Annotated[Session, Depends(database.get_session)]
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    database.create_schema_and_tables()
+    database.seed()
+    yield
+
+app = FastAPI(lifespan=lifespan)
