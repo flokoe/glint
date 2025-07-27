@@ -16,22 +16,11 @@
 
 # SPDX-License-Identifier: AGPL-3.0-only
 
-from contextlib import asynccontextmanager
-from typing import Annotated
+from pydantic_settings import BaseSettings
 
-from fastapi import Depends, FastAPI
-from sqlmodel import Session
-from config import Settings
 
-import database
+class Settings(BaseSettings):
+    single_user: bool = True
 
-SessionDep = Annotated[Session, Depends(database.get_session)]
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    database.create_schema_and_tables()
-    database.seed()
-    yield
 
 settings = Settings()
-app = FastAPI(lifespan=lifespan)
