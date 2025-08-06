@@ -19,14 +19,6 @@ CREATE TABLE llms (
     CONSTRAINT fk_providers_llm FOREIGN KEY (provider_id) REFERENCES providers (id)
 );
 
-CREATE TABLE users (
-    id         integer PRIMARY KEY AUTOINCREMENT,
-    email      text    NOT NULL,
-    name       text,
-    created_at integer NOT NULL DEFAULT (unixepoch('now')),
-
-    CONSTRAINT uni_users_email UNIQUE (email)
-);
 
 CREATE TABLE conversations (
     id         integer PRIMARY KEY AUTOINCREMENT,
